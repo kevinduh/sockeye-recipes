@@ -15,15 +15,12 @@ if [ $2 == "cpu" ]; then
 else
     source activate sockeye_gpu
     module load cuda80/toolkit
-    #device="--device-id 1"
-    gpu_id=`/home/hltcoe/kduh/src/mt/sockeye-recipes/scripts/get-gpu.sh`
+    gpu_id=`$rootdir/scripts/get-gpu.sh`
     device="--device-id $gpu_id"
 fi
 
 
 # basic settings
-#rootdir="$(readlink -f "$(dirname "$0")/../")"
-rootdir=/home/hltcoe/kduh/src/mt/sockeye-recipes
 multibleu=$rootdir/tools/multi-bleu.perl
 step=1
 resultlog=$modeldir/multibleu.valid_bpe.result

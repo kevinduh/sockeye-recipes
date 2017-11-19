@@ -18,10 +18,10 @@ if [ $5 == "cpu" ]; then
 else
     source activate sockeye_gpu
     module load cuda80/toolkit
-    device="--device-id 1"
+    gpu_id=`$rootdir/scripts/get-gpu.sh`
+    device="--device-id $gpu_id"
 fi
 
-rootdir="$(readlink -f "$(dirname "$0")/../")"
 subword=$rootdir/tools/subword-nmt/
 
 ### Apply BPE to input, run Sockeye.translate, then de-BPE ###

@@ -18,7 +18,6 @@ bpe_minfreq=2
 
 
 # (1) Save new BPE'ed data and vocab file in datadir 
-rootdir="$(readlink -f "$(dirname "$0")/../")"
 subword=$rootdir/tools/subword-nmt/
 mkdir -p $datadir
 
