@@ -10,7 +10,7 @@ source activate $venv
 rootdir="$(readlink -f "$(dirname "$0")/../")"
 cd $rootdir
 git submodule init
-git submodule update
+git submodule update sockeye
 cd sockeye
 pip install mxnet-cu80==0.10.0
 pip install pyaml numpy matplotlib tensorboard

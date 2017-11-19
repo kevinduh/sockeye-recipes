@@ -23,9 +23,12 @@ Run the following to install Sockeye in two Anaconda environments, sockeye_cpu a
 > cd path/to/sockeye-recipes
 > sh ./install/install_sockeye_cpu.sh
 > sh ./install/install_sockeye_gpu.sh
+> sh ./install/install_tools.sh
 ```
 
 The training scripts and recipes will activate either the sockeye_cpu or sockeye_gpu environment depending on whether CPU or GPU is specified. 
+The third install_tools.sh script simply installs some helper tools, such as BPE preprocesser.
+
 
 ## Example Run
 We will train a model on some sample German-English data.
