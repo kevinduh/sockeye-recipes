@@ -109,3 +109,15 @@ sh path/to/sockeye-recipes/scripts/translate.sh modeldir bpe_vocab_src input out
 ```
 
 Note that this script does not require a hyperparams file. One simply needs to point to the modeldir and the BPE source vocabulary (usually in datadir) in order to start up a translation service.
+
+
+## Design Principles and Suggested Usage
+
+Building NMT systems can be a tedious process involving lenghty experimentation with hyperparameters. The goal of sockeye-recipes is to make it easy to try many different configurations and to record best practices as example recipes. The suggested usage is as follows:
+- Prepare your training and validation bitext beforehand with the necessary preprocessing (e.g. data consolidation, tokenization, lower/true-casing). Sockeye-recipes simply assumes pairs of train_tok and valid_tok files. 
+- Set the working directory to correspond to a single suite of experiments on the same dataset (e.g. WMT17-German-English)
+- The only preprocessing handled here is BPE. Run preprocess-bpe.sh with different BPE vocabulary sizes (bpe_symbols_src, bpe_symbols_trg). These can be saved all to the same datadir.
+- train.sh is the main training script. Specify a new modeldir for each train.sh run. The hyperparms.txt file used in training will be saved in modeldir for future reference. 
+- At the end, your workingdir will have a single datadir containing multiple BPE'ed versions of the bitext, and multiple modeldir's. You can run tensorboard on all these modeldir's concurrently to compare learning curves.
+
+There are many options in Sockeye. Currently not all of them are used in sockeye-recipes; more will be added. See [sockeye/arguments.py](https://github.com/kevinduh/sockeye/blob/master/sockeye/arguments.py) for detailed explanations. 
