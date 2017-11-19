@@ -81,7 +81,7 @@ bpe_vocab_trg=${train_bpe}.$trg.bpe_vocab
 num_embed="50:50"
 rnn_num_hidden=50
 attention_type="dot"
-num_layers="1:1"
+num_layers=1
 rnn_cell_type="lstm"
 
 # Training configuration
