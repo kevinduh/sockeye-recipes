@@ -43,6 +43,7 @@ python -m sockeye.train -s ${train_bpe}.$src \
                         --checkpoint-frequency $checkpoint_frequency \
                         --num-words $num_words \
                         --word-min-count $word_min_count \
+                        --max-updates $max_updates \
                         --use-tensorboard \
                         $device \
                         -o $modeldir
