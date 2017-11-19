@@ -43,6 +43,12 @@ python -m sockeye.train -s ${train_bpe}.$src \
                         --num-words $num_words \
                         --word-min-count $word_min_count \
                         --max-updates $max_updates \
+                        --num-layers $num_layers \
+                        --rnn-cell-type $rnn_cell_type \
+                        --batch-size $batch_size \
+                        --min-num-epochs $min_num_epochs \
+                        --embed-dropout $embed_dropout \
+                        --keep-last-params $keep_last_params \
                         --use-tensorboard \
                         $device \
                         -o $modeldir

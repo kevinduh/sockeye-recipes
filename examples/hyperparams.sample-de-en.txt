@@ -77,11 +77,22 @@ bpe_vocab_trg=${train_bpe}.$trg.bpe_vocab
 # (2) train.sh settings (modify if needed)                          #
 #####################################################################
 
-num_embed=50
+# Model architecture
+num_embed="50:50"
 rnn_num_hidden=50
 attention_type="dot"
+num_layers="1:1"
+rnn_cell_type="lstm"
+
+# Training configuration
 max_seq_len="100:100"
-checkpoint_frequency=100
-max_updates=400
 num_words="4000:4000"
 word_min_count="1:1"
+batch_size=64
+min_num_epochs=0
+embed_dropout=".0:.0"
+
+# Logging and stopping condition
+checkpoint_frequency=100
+max_updates=400
+keep_last_params=-1
