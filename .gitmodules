@@ -1,0 +1,6 @@
+[submodule "sockeye"]
+	path = sockeye
+	url = https://github.com/kevinduh/sockeye
+[submodule "tools/subword-nmt"]
+	path = tools/subword-nmt
+	url = https://github.com/kevinduh/subword-nmt
