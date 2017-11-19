@@ -62,7 +62,7 @@ sh path/to/sockeye-recipes/scripts/preprocess-bpe.sh hyperparams.sample-de-en.tx
 This is a standard way (though not the only way) to handle large vocabulary in NMT. Currently sockeye-recipes assumes BPE segmentation before training. The preprocess-bpe.sh script takes a hyperparams file as input and preprocesses accordingly. To get a flavor of BPE segmentation results (train.en is original, train.bpe-4000.en is BPE'ed, and the string '@@' indicates BPE boundary): 
 
 ```bash
-head -3 sample-de-en/train.en sample-de-en/train.bpe-4000.en
+head -3 sample-de-en/train.en data/train.bpe-4000.en
 ```
 
 (4) Now, we can train the NMT model. We give the train.sh script the hyperparameters and tell it whether to train on CPU or GPU.

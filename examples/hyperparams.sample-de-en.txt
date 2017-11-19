@@ -32,7 +32,7 @@
 
 ### User-specified directories ###
 workdir=~/sockeye_trial/
-datadir=$workdir/sample-de-en
+datadir=$workdir/data
 modeldir=$workdir/model1
 rootdir=/home/hltcoe/kduh/src/mt/sockeye-recipes/
 
@@ -46,8 +46,8 @@ trg=en
 # Note we assume tokenization is already done, and will only run BPE
 # For tokenization and other preprocessing, see preprocess-tokenize.sh
 # which does not use this hyperparam.txt file
-train_tok=$datadir/train
-valid_tok=$datadir/valid
+train_tok=$workdir/sample-de-en/train
+valid_tok=$workdir/sample-de-en/valid
 
 
 
