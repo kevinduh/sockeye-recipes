@@ -37,7 +37,7 @@ python -m sockeye.train -s ${train_bpe}.$src \
                         -vt ${valid_bpe}.$trg \
                         --num-embed $num_embed \
                         --rnn-num-hidden $rnn_num_hidden \
-                        --attention-type $attention_type \
+                        --rnn-attention-type $attention_type \
                         --max-seq-len $max_seq_len \
                         --checkpoint-frequency $checkpoint_frequency \
                         --num-words $num_words \
