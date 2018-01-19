@@ -28,7 +28,7 @@ rm $resultlog
 
 # loop over each checkpoint
 for c in `seq 1 $step 9999`; do
-    checkpoint=`printf %04d $c`
+    checkpoint=`printf %05d $c`
 
     # quit if checkpoint does not exist
     if [ ! -f $modeldir/params.$checkpoint ]; then
