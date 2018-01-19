@@ -12,6 +12,6 @@ cd $rootdir
 git submodule init
 git submodule update sockeye
 cd sockeye
-git checkout 17b4d3229067414bec527b5c7b6c70fd43b32cf6
+git checkout 762ce78e4e49b9ba5d14eb0a48d97f19c8807707 # version 1.16.2
 pip install -e '.[optional]'
 
