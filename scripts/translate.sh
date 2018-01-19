@@ -1,20 +1,17 @@
 #!/bin/bash
 
 
-if [ $# -ne 5 ]; then
-    echo "Usage: translate.sh modeldir bpe_vocab_src input output device(cpu/gpu)"
+if [ $# -ne 4 ]; then
+    echo "Usage: translate.sh hyperparams.txt input output device(cpu/gpu)"
     exit
 fi
 
 
-modeldir=$1
-bpe_vocab_src=$2
-input=$3
-output=$4
+source $1
+input=$2
+output=$3
 
-rootdir=~/sockeye-recipes/
-
-if [ $5 == "cpu" ]; then
+if [ $4 == "cpu" ]; then
     source activate sockeye_cpu_dev
     device="--use-cpu"
 else
