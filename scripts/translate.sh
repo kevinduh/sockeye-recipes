@@ -12,6 +12,8 @@ bpe_vocab_src=$2
 input=$3
 output=$4
 
+rootdir=~/sockeye-recipes/
+
 if [ $5 == "cpu" ]; then
     source activate sockeye_cpu_dev
     device="--use-cpu"
