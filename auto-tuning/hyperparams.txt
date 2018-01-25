@@ -31,10 +31,9 @@
 #####################################################################
 
 ### User-specified directories ###
-workdir=~/sockeye_trial/
-datadir=$workdir/data
-modeldir=$workdir/model1
-rootdir=/home/hltcoe/kduh/src/mt/sockeye-recipes/
+workdir=~/sockeye_trial_dev/
+datadir=$workdir/data_example
+rootdir=~/my-sockeye-recipes/
 
 ### Language pair (source and target) ###
 # Note: We assume all bitext files contain these as suffices. 
@@ -79,7 +78,7 @@ bpe_vocab_trg=${train_bpe}.$trg.bpe_vocab
 
 # Model architecture
 num_embed="50:50"
-rnn_num_hidden=1024
+rnn_num_hidden=100
 attention_type="dot"
 num_layers=1
 rnn_cell_type="lstm"
@@ -89,7 +88,7 @@ max_seq_len="100:100"
 num_words="4000:4000"
 word_min_count="1:1"
 batch_size=64
-min_num_epochs=15
+min_num_epochs=0
 embed_dropout=".0:.0"
 
 # Logging and stopping condition
@@ -104,7 +103,7 @@ keep_last_params=1
 
 # hyperparameters to be tuned with initial value
 # make sure every parameter has a corresponding map function
-params="{'rnn_num_hidden':1024,'batch_size':64}"
+params="{'rnn_num_hidden':100,'batch_size':64}"
 
 # map function for mapping hyparameters into the same scale
 # choose from ['log', 'exp', 'identity']

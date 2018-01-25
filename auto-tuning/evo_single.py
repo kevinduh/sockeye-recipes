@@ -9,7 +9,7 @@ from collections import OrderedDict
 funcs = {'log': lambda x: np.log(x),
          'exp': lambda x: np.exp(x),
          'identity': lambda x: x}
-inverse_funcs = {'log': lambda x: np.around(np.exp(np.abs(x))).astype(np.int),
+inverse_funcs = {'log': lambda x: (np.around(np.exp(np.abs(x))/2)*2).astype(np.int),
                  'exp': lambda x: np.around(np.log(np.abs(x)), decimals=10),
                  'identity': lambda x: np.abs(x)}
 
