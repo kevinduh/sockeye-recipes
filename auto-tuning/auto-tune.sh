@@ -8,6 +8,9 @@ if [ $# -ne 2 ]; then
     exit
 fi
 
+# export all variables
+set -a 
+
 ###########################################
 # (0) Hyperparameter settings
 # source hyperparams.txt to get text files and all training hyperparameters
@@ -64,57 +67,11 @@ for ((n_generation=$n_generation;n_generation<$generation;n_generation++))
         
         ###########################################
         # (1.3) train models described by model description file in current generation 
-        for ((n_population=0;n_population<$population;n_population++))
-          do
-            # model folder
-            model_path="${generation_path}model_$(printf "%02d" "$n_population")/"
-            # path to evaluation score path
-            eval_scr="${model_path}metrics"
+        $pycmd parallel.py \
+        --pop $population \
+        --num-devices $num-devices
 
-            mkdir $model_path
-            touch ${eval_scr}
-            
-            # # generate some fake score for testing
-            # $py_cmd toy_nmt.py \
-            # --trg $eval_scr \
-            # --n-gen $n_generation \
-            # --min-num-epochs $min_num_epochs
-
-            # update the tuned hyperparameters
-            source $(printf ${gene} $(printf "%02d" ${n_population}))
-            
-            # train the model
-            $py_cmd -m sockeye.train -s ${train_bpe}.$src \
-                        -t ${train_bpe}.$trg \
-                        -vs ${valid_bpe}.$src \
-                        -vt ${valid_bpe}.$trg \
-                        --num-embed $num_embed \
-                        --rnn-num-hidden $rnn_num_hidden \
-                        --rnn-attention-type $attention_type \
-                        --max-seq-len $max_seq_len \
-                        --checkpoint-frequency $checkpoint_frequency \
-                        --num-words $num_words \
-                        --word-min-count $word_min_count \
-                        --max-updates $max_updates \
-                        --num-layers $num_layers \
-                        --rnn-cell-type $rnn_cell_type \
-                        --batch-size $batch_size \
-                        --min-num-epochs $min_num_epochs \
-                        --embed-dropout $embed_dropout \
-                        --keep-last-params $keep_last_params \
-                        --use-tensorboard \
-                        $device \
-                        -o $model_path
-
-            # report result to gene.scr file
-            $py_cmd reporter.py \
-            --trg ${generation_path}genes.scr \
-            --scr $eval_scr \
-            --pop $population \
-            --n-pop $n_population \
-            --n-gen $n_generation
-
-          done
+        done
 
     done
         # Finished

@@ -1,37 +1,18 @@
 #!/bin/bash
 #
-# Train a Neural Machine Translation model using Sockeye
+# Auto-tune a Neural Machine Translation model 
+# Using Sockeye and CMA-ES algorithm
 
-if [ $# -ne 2 ]; then
-    echo "Usage: train.sh hyperparams.txt device(gpu/cpu)"
-    exit
-fi
+n_population=$1
 
-###########################################
-# (0) Hyperparameter settings
-# source hyperparams.txt to get text files and all training hyperparameters
-source $1
+model_path="${generation_path}model_$(printf "%02d" "$n_population")/"
+# path to evaluation score path
+eval_scr="${model_path}metrics"
 
-# options for cpu vs gpu training (may need to modify for different grids)
-if [ $2 == "cpu" ]; then
-    source activate sockeye_cpu_dev
-    device="--use-cpu"
-else
-    source activate sockeye_gpu_dev
-    module load cuda80/toolkit
-    gpu_id=`$rootdir/scripts/get-gpu.sh`
-    device="--device-id $gpu_id"
-fi
+mkdir $model_path
+touch ${eval_scr}
 
-###########################################
-# (1) Book-keeping
-mkdir -p $modeldir
-#datenow=`date '+%Y-%m-%d %H:%M:%S'`
-cp $1 $modeldir/hyperparams.txt
-
-###########################################
-# (2) train the model (this may take a while) 
-python -m sockeye.train -s ${train_bpe}.$src \
+$py_cmd -m sockeye.train -s ${train_bpe}.$src \
                         -t ${train_bpe}.$trg \
                         -vs ${valid_bpe}.$src \
                         -vt ${valid_bpe}.$trg \
@@ -51,4 +32,11 @@ python -m sockeye.train -s ${train_bpe}.$src \
                         --keep-last-params $keep_last_params \
                         --use-tensorboard \
                         $device \
-                        -o $modeldir
+                        -o $model_path
+
+$py_cmd reporter.py \
+--trg ${generation_path}genes.scr \
+--scr $eval_scr \
+--pop $population \
+--n-pop $n_population \
+--n-gen $n_generation

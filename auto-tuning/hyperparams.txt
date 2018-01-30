@@ -25,6 +25,8 @@
 # - main hyperparameters: many! see below                           #
 #####################################################################
 
+# export all variables
+set -a 
 
 #####################################################################
 # (0) General settings (to be modified for each project)            #
