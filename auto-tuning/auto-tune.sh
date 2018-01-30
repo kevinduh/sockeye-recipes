@@ -63,10 +63,11 @@ for ((n_generation=$n_generation;n_generation<$generation;n_generation++))
         ###########################################
         # (1.3) train models described by model description file in current generation 
         $py_cmd parallel.py \
+        --hyperparams $1 \
         --pop $population \
-        --num-devices $num_devices
-
-        done
+        --num-devices $num_devices \
+        --generation_path $generation_path \
+        --gene $gene \
 
     done
         # Finished

@@ -3,8 +3,20 @@
 # Auto-tune a Neural Machine Translation model 
 # Using Sockeye and CMA-ES algorithm
 
-n_population=$1
+# source hyperparameters.txt
+source $1
 
+# current population 
+n_population=$2
+
+# path to the current generation folder
+generation_path=$3
+
+# path to the gene file
+gene=$4
+
+# current generation
+n_generation=$5
 
 if [ $device == "cpu" ]; then
     source activate sockeye_cpu_dev
@@ -21,7 +33,9 @@ model_path="${generation_path}model_$(printf "%02d" "$n_population")/"
 eval_scr="${model_path}metrics"
 
 mkdir $model_path
-touch ${eval_scr}
+
+# update the tuned hyperparameters
+source $(printf ${gene} $(printf "%02d" ${n_population}))
 
 $py_cmd -m sockeye.train -s ${train_bpe}.$src \
                         -t ${train_bpe}.$trg \
@@ -46,8 +60,8 @@ $py_cmd -m sockeye.train -s ${train_bpe}.$src \
                         -o $model_path
 
 $py_cmd reporter.py \
---trg ${generation_path}genes.scr \
---scr $eval_scr \
---pop $population \
---n-pop $n_population \
---n-gen $n_generation
+        --trg ${generation_path}genes.scr \
+        --scr $eval_scr \
+        --pop $population \
+        --n-pop $n_population \
+        --n-gen $n_generation
