@@ -3,8 +3,8 @@
 # Auto-tune a Neural Machine Translation model 
 # Using Sockeye and CMA-ES algorithm
 
-if [ $# -ne 2 ]; then
-    echo "Usage: auto-tune.sh hyperparams.txt device(gpu/cpu)"
+if [ $# -ne 3 ]; then
+    echo "Usage: auto-tune.sh hyperparams.txt device(gpu/cpu) num_devices"
     exit
 fi
 
@@ -18,6 +18,9 @@ source $1
 
 # options for cpu vs gpu training (may need to modify for different grids)
 device=$2
+
+# Number of cpu or gpu that can be allocated for auto-tuning
+num_devices=$3
 
 ###########################################
 # (1) Hyperparameter auto-tuning
@@ -59,9 +62,9 @@ for ((n_generation=$n_generation;n_generation<$generation;n_generation++))
         
         ###########################################
         # (1.3) train models described by model description file in current generation 
-        $pycmd parallel.py \
+        $py_cmd parallel.py \
         --pop $population \
-        --num-devices $num-devices
+        --num-devices $num_devices
 
         done
 
