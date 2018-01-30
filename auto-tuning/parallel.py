@@ -3,7 +3,7 @@ import multiprocessing
 from logger import *
 import argparse
 
-qsub_sh = "qsub -sync y -l 'gpu=1' -q g.q ${rootdir}/auto-tuning/train.sh %s %s %s %s %s"
+qsub_sh = "qsub -sync y -l 'gpu=1' -q g.q ${rootdir}/auto-tuning/train.sh " 
 
 def get_arguments():
     parser = argparse.ArgumentParser(description=None)
@@ -19,16 +19,17 @@ def get_arguments():
     args = parser.parse_args()
     return args
 
-def run_train(hyparam, n_dev, gen_path, gene, n_gen):
+def run_train(n_dev):
     logging.info("Start training model %s ......"%(str(n_dev)))
-    os.system(qsub_sh%(hyparam, str(n_dev), gen_path, gene, str(n_gen)))
+    os.system(qsub_sh%(str(n_dev)))
     logging.info("Finish training model %s ......"%(str(n_dev)))
 
-def train_parallel(num_devices):
+def train_parallel(num_devices, pop):
     pool = multiprocessing.Pool(num_devices)
-    pool.map(run_train, [n_dev for n_dev in range(args.pop)])
+    pool.map(run_train, [n_pop for n_pop in range(pop)])
 
 
 if __name__ == "__main__":
     args = get_arguments()
-    train_parallel(args.hyperparams, args.num_devices, args.generation_path, args.gene, args.n_generation)
+    qsub_sh += " ".join([args.hyperparams, args.generation_path, args.gene, str(args.n_generation)]) + " %s"
+    train_parallel(args.num_devices, args.pop)

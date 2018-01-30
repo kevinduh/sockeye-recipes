@@ -6,17 +6,17 @@
 # source hyperparameters.txt
 source $1
 
-# current population 
-n_population=$2
-
 # path to the current generation folder
-generation_path=$3
+generation_path=$2
 
 # path to the gene file
-gene=$4
+gene=$3
 
 # current generation
-n_generation=$5
+n_generation=$4
+
+# current population 
+n_population=$5
 
 if [ $device == "cpu" ]; then
     source activate sockeye_cpu_dev
