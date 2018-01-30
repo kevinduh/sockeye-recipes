@@ -5,6 +5,17 @@
 
 n_population=$1
 
+
+if [ $device == "cpu" ]; then
+    source activate sockeye_cpu_dev
+    device="--use-cpu"
+else
+    source activate sockeye_gpu_dev
+    module load cuda80/toolkit
+    gpu_id=`$rootdir/scripts/get-gpu.sh`
+    device="--device-id $gpu_id"
+fi
+
 model_path="${generation_path}model_$(printf "%02d" "$n_population")/"
 # path to evaluation score path
 eval_scr="${model_path}metrics"
