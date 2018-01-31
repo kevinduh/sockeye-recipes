@@ -110,6 +110,28 @@ sh path/to/sockeye-recipes/scripts/translate.sh modeldir bpe_vocab_src input out
 
 Note that this script does not require a hyperparams file. One simply needs to point to the modeldir and the BPE source vocabulary (usually in datadir) in order to start up a translation service.
 
+#### Environment Setup
+To set up the running environment, we add the following configurations in the ~/.bashrc file.
+Sockeye uses Java 8, so we may need to configure the Java environment:
+
+```bash
+JAVA_HOME=path/to/jdk8_version
+export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_HOME
+```
+
+Configure CUDA and CuDNN for the GPU version of Sockeye:
+
+```bash
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
+```
+
+Set up a clean UTF-8 environment to avoid encoding errors:
+
+```bash
+export LANG=en_US.UTF-8
+```
+
 
 ## Design Principles and Suggested Usage
 
