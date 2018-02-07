@@ -6,17 +6,21 @@
 # source hyperparameters.txt
 source $1
 
+# options for cpu vs gpu training
+device=$2
+
 # path to the current generation folder
-generation_path=$2
-
-# path to the gene file
-gene=$3
-
-# current generation
-n_generation=$4
+generation_path=$3
 
 # current population 
-n_population=$5
+n_population=$4
+
+# path to the gene file
+gene=$5
+
+# current generation
+n_generation=$6
+
 
 if [ $device == "cpu" ]; then
     source activate sockeye_cpu_dev

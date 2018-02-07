@@ -3,7 +3,8 @@ import multiprocessing
 from logger import *
 import argparse
 
-qsub_sh = "qsub -sync y -l 'gpu=1' -q g.q ${rootdir}/auto-tuning/train.sh " 
+# command for submitting gpu task
+qsub_sh = "qsub -sync y -l 'gpu=1' -q g.q " 
 
 def get_arguments():
     parser = argparse.ArgumentParser(description=None)
@@ -12,24 +13,39 @@ def get_arguments():
     parser.add_argument("--pop", default=30, type=int, help="population")
     parser.add_argument("--num-devices", default=1, type=int, 
                         help="the number of computation resources allocated")
-    parser.add_argument("--generation_path", type=str, help="path to current generation folder")
+    parser.add_argument("--autotunedir", type=str, help="root directory of the script")
+    parser.add_argument("--device", type=str, help="options for cpu vs gpu training")
+    parser.add_argument("--generation-path", type=str, help="path to current generation folder")
     parser.add_argument("--gene",type=str,help="path to gene files")
     parser.add_argument("--n-generation", type=int, help="current generation")
-
+    
     args = parser.parse_args()
     return args
 
-def run_train(n_dev):
-    logging.info("Start training model %s ......"%(str(n_dev)))
-    os.system(qsub_sh%(str(n_dev)))
-    logging.info("Finish training model %s ......"%(str(n_dev)))
+def form_qsub(n_pop):
+    gene = args.gene%(str(n_pop))
+    params = [args.hyperparams, args.device, args.generation_path, str(n_pop), gene, args.n_generation]
+    train_sh = args.autotunedir + "/train.sh"
+    return train_sh + " ".join(params)
 
-def train_parallel(num_devices, pop):
+def run_train_gpu(n_pop):
+    logging.info("Start training model %s ......"%(str(n_pop)))
+    os.system(qsub_sh + form_qsub(n_pop))
+    logging.info("Finish training model %s ......"%(str(n_pop)))
+
+def run_train_cpu(n_pop):
+    logging.info("Start training model %s ......"%(str(n_pop)))
+    os.system("sh " + form_qsub(n_pop))
+    logging.info("Finish training model %s ......"%(str(n_pop)))
+
+def train_parallel(num_devices, pop, device):
     pool = multiprocessing.Pool(num_devices)
-    pool.map(run_train, [n_pop for n_pop in range(pop)])
+    if device=="cpu":
+        pool.map(run_train_cpu, [n_pop for n_pop in range(pop)])
+    else:
+        pool.map(run_train_gpu, [n_pop for n_pop in range(pop)])
 
 
 if __name__ == "__main__":
     args = get_arguments()
-    qsub_sh += " ".join([args.hyperparams, args.generation_path, args.gene, str(args.n_generation)]) + " %s"
-    train_parallel(args.num_devices, args.pop)
+    train_parallel(args.num_devices, args.pop, args.device)
