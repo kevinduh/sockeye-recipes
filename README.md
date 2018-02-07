@@ -112,13 +112,6 @@ Note that this script does not require a hyperparams file. One simply needs to p
 
 #### Environment Setup
 To set up the running environment, we add the following configurations in the ~/.bashrc file.
-Sockeye uses Java 8, so we may need to configure the Java environment:
-
-```bash
-JAVA_HOME=path/to/jdk8_version
-export PATH="$JAVA_HOME/bin:$PATH"
-export JAVA_HOME
-```
 
 Configure CUDA and CuDNN for the GPU version of Sockeye:
 
