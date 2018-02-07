@@ -6,20 +6,23 @@
 # source hyperparameters.txt
 source $1
 
+#root directory of the auto-tuning scripts
+autotunedir=$2
+
 # options for cpu vs gpu training
-device=$2
+device=$3
 
 # path to the current generation folder
-generation_path=$3
+generation_path=$4
 
 # current population 
-n_population=$4
+n_population=$5
 
 # path to the gene file
-gene=$5
+gene=$6
 
 # current generation
-n_generation=$6
+n_generation=$7
 
 
 if [ $device == "cpu" ]; then
@@ -63,7 +66,7 @@ $py_cmd -m sockeye.train -s ${train_bpe}.$src \
                         $device \
                         -o $model_path
 
-$py_cmd reporter.py \
+$py_cmd $autotunedir/reporter.py \
         --trg ${generation_path}genes.scr \
         --scr $eval_scr \
         --pop $population \

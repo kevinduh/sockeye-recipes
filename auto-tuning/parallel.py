@@ -13,7 +13,7 @@ def get_arguments():
     parser.add_argument("--pop", default=30, type=int, help="population")
     parser.add_argument("--num-devices", default=1, type=int, 
                         help="the number of computation resources allocated")
-    parser.add_argument("--autotunedir", type=str, help="root directory of the script")
+    parser.add_argument("--autotunedir", type=str, help="root directory of the auto-tuning scripts")
     parser.add_argument("--device", type=str, help="options for cpu vs gpu training")
     parser.add_argument("--generation-path", type=str, help="path to current generation folder")
     parser.add_argument("--gene",type=str,help="path to gene files")
@@ -23,9 +23,9 @@ def get_arguments():
     return args
 
 def form_qsub(n_pop):
-    gene = args.gene%(str(n_pop))
-    params = [args.hyperparams, args.device, args.generation_path, str(n_pop), gene, args.n_generation]
-    train_sh = args.autotunedir + "/train.sh"
+    gene = args.gene%(str(n_pop).zfill(2))
+    params = [args.hyperparams, args.autotunedir, args.device, args.generation_path, str(n_pop), gene, str(args.n_generation)]
+    train_sh = args.autotunedir + "/train.sh "
     return train_sh + " ".join(params)
 
 def run_train_gpu(n_pop):
