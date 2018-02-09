@@ -30,7 +30,8 @@ def form_qsub(n_pop):
 
 def run_train_gpu(n_pop):
     logging.info("Start training model %s ......"%(str(n_pop)))
-    os.system(qsub_sh + form_qsub(n_pop))
+    while(not os.path.exists(os.path.join(args.generation_path, "model_%s/metrics"%(str(n_pop).zfill(2))))):
+        os.system(qsub_sh + form_qsub(n_pop))
     logging.info("Finish training model %s ......"%(str(n_pop)))
 
 def run_train_cpu(n_pop):

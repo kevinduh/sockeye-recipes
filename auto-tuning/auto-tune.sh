@@ -74,4 +74,7 @@ for ((n_generation=$n_generation;n_generation<$generation;n_generation++))
         
 
     done
-        # Finished
+
+# Finished
+echo "All ${generation} generations finished training."
+echo "DONE"

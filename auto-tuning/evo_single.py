@@ -66,7 +66,7 @@ def evolution(args):
             # read score file
             scores = f.readlines()
         # get perplexity-val for each model as metric
-        Y = list(map(lambda y: -float(y.split("=")[-1]),list(map(lambda x: x.strip().split("\t")[2], scores))))
+        Y = list(map(lambda x: -float(x.strip().split("\t")[-1]), scores))
         es.tell(X, Y)
 
     # save current checkpoint
