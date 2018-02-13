@@ -12,10 +12,10 @@ funcs = {'log': lambda x: np.log(x),
 # inverse_funcs
 # 'log': 'exp' positive integer
 # 'exp': 'log' positive
-# 'indentity_int': positive integer
+# 'indentity_int': positive integer, greater than 1
 inverse_funcs = {'log': lambda x: (np.around(np.exp(np.abs(x))/2)*2).astype(np.int),
-                 'exp': lambda x: np.around(np.log(np.abs(x)), decimals=10),
-                 'identity_int': lambda x: np.abs(x).astype(np.int)}
+                 'exp': lambda x: np.around(np.abs(np.log(np.abs(x))), decimals=10),
+                 'identity_int': lambda x: 1+np.abs(x).astype(np.int)}
 
 def get_arguments():
     parser = argparse.ArgumentParser(description=None)
