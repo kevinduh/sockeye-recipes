@@ -35,14 +35,14 @@ set -a
 
 ### User-specified directories ###
 workdir=~/sockeye_trial_dev/
-datadir=$workdir/data_example
+datadir=$workdir/data
 rootdir=~/my-sockeye-recipes/
 autotunedir=$rootdir/auto-tuning/
 
 ### Language pair (source and target) ###
 # Note: We assume all bitext files contain these as suffices. 
 # e.g. $train_tok.$src, $train_tok.$trg refer to the source and target 
-src=de
+src=zh
 trg=en
 
 ### Tokenized training and validation data ###
@@ -81,22 +81,22 @@ bpe_vocab_trg=${train_bpe}.$trg.bpe_vocab
 #####################################################################
 
 # Model architecture
-num_src_embed=50
-num_trg_embed=50
+num_src_embed=512
+num_trg_embed=512
 num_embed="${num_src_embed}:${num_trg_embed}"
-rnn_num_hidden=100
+rnn_num_hidden=1024
 attention_type="dot"
 num_layers=1
 rnn_cell_type="lstm"
 
 # Training configuration
 max_seq_len="100:100"
-num_src_words=4000
-num_trg_words=4000
+num_src_words=5000
+num_trg_words=5000
 num_words="${num_src_words}:${num_trg_words}"
 word_min_count="1:1"
 batch_size=64
-min_num_epochs=0
+min_num_epochs=15
 embed_src_dropout=.0
 embed_trg_dropout=.0
 embed_dropout="${embed_src_dropout}:${embed_trg_dropout}"
@@ -111,8 +111,8 @@ rnn_decoder_hidden_dropout=.0
 initial_learning_rate=0.003
 
 # Logging and stopping condition
-checkpoint_frequency=100
-max_updates=400
+checkpoint_frequency=1000
+max_updates=4000000
 keep_last_params=1
 
 
@@ -122,7 +122,7 @@ keep_last_params=1
 
 # hyperparameters to be tuned with initial value
 # make sure every parameter has a corresponding map function
-params="{'rnn_num_hidden':100,'batch_size':64,'num_layers':1,'num_src_embed':50,'num_trg_embed':50,'initial_learning_rate':0.003,'embed_src_dropout':.0,'embed_trg_dropout':.0,'rnn_encoder_dropout_outputs':.0,'rnn_decoder_dropout_outputs':.0,'rnn_encoder_dropout_states':.0,'rnn_decoder_dropout_states':.0,'rnn_decoder_hidden_dropout':.0,'num_src_words':4000,'num_trg_words':4000}"
+params="{'rnn_num_hidden':1024,'batch_size':64,'num_layers':1,'num_src_embed':512,'num_trg_embed':512,'initial_learning_rate':0.003,'embed_src_dropout':.0,'embed_trg_dropout':.0,'rnn_encoder_dropout_outputs':.0,'rnn_decoder_dropout_outputs':.0,'rnn_encoder_dropout_states':.0,'rnn_decoder_dropout_states':.0,'rnn_decoder_hidden_dropout':.0,'num_src_words':4000,'num_trg_words':4000}"
 
 # map function for mapping hyparameters into the same scale
 # choose from ['log', 'exp', 'identity_int']
@@ -132,10 +132,10 @@ map_func="{'rnn_num_hidden':'log','batch_size':'log','num_layers':'identity_int'
 n_generation=0
 
 # number of generation 
-generation=2
+generation=10
 
 # number of population
-population=3
+population=30
 
 # path to checkpoint folder
 checkpoint_path=$autotunedir/checkpoints/
@@ -148,9 +148,6 @@ generation_dir=$autotunedir/
 
 # parent directory of previous generation folder
 prev_generation_dir=$autotunedir/
-
-# number of hyperparameter to be optimized
-n_hparam=5
 
 # command for python interpreter
 py_cmd=python3
