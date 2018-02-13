@@ -23,7 +23,7 @@ def read_scr_file(args):
     with open(args.scr) as f:
         scores_raw = f.readlines()
 
-    # scores = # of iteration * {'perplexity-train', 'perplexity-val', 'time-elapsed', 'used-gpu-memory'}
+    # scores = # of iteration * {'avg-sec-per-sent-val', 'bleu-val', 'chrf-val', 'perplexity-train', 'perplexity-val', 'time-elapsed', 'used-gpu-memory'}
     scores = list(map(lambda x: x.strip().replace('=','\t').split('\t')[1:], scores_raw))
     scores = list(map(lambda x: {x[i]:float(x[i+1]) for i in range(0, len(x), 2)}, scores))
 
@@ -58,4 +58,7 @@ def report(args, rst):
 if __name__ == "__main__":
     args = get_arguments()
     scores = read_scr_file(args)
-    report(args, scores[-1]['perplexity-val'])
+    # report perplexity-val
+    # report(args, scores[-1]['perplexity-val'])
+    # report bleu-val
+    report(args, scores[-1]['bleu-val'])

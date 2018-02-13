@@ -81,7 +81,9 @@ bpe_vocab_trg=${train_bpe}.$trg.bpe_vocab
 #####################################################################
 
 # Model architecture
-num_embed="50:50"
+num_src_embed=50
+num_trg_embed=50
+num_embed="${num_src_embed}:${num_trg_embed}"
 rnn_num_hidden=100
 attention_type="dot"
 num_layers=1
@@ -93,7 +95,18 @@ num_words="4000:4000"
 word_min_count="1:1"
 batch_size=64
 min_num_epochs=0
-embed_dropout=".0:.0"
+embed_src_dropout=.0
+embed_trg_dropout=.0
+embed_dropout="${embed_src_dropout}:${embed_trg_dropout}"
+rnn_encoder_dropout_outputs=.0
+rnn_decoder_dropout_outputs=.0
+rnn_dropout_inputs="${rnn_encoder_dropout_outputs}:${rnn_decoder_dropout_outputs}"
+rnn_encoder_dropout_states=.0
+rnn_decoder_dropout_states=.0
+rnn_dropout_states="${rnn_encoder_dropout_states}:${rnn_decoder_dropout_states}"
+rnn_decoder_hidden_dropout=.0
+
+initial_learning_rate=0.003
 
 # Logging and stopping condition
 checkpoint_frequency=100
@@ -107,11 +120,11 @@ keep_last_params=1
 
 # hyperparameters to be tuned with initial value
 # make sure every parameter has a corresponding map function
-params="{'rnn_num_hidden':100,'batch_size':64}"
+params="{'rnn_num_hidden':100,'batch_size':64,'num_layers':1,'num_src_embed':50,'num_trg_embed':50,'initial_learning_rate':0.003,'bpe_symbols_src':4000,'bpe_symbols_trg':4000,'embed_src_dropout':.0,'embed_trg_dropout':.0,'rnn_encoder_dropout_outputs':.0,'rnn_decoder_dropout_outputs':.0,'rnn_encoder_dropout_states':.0,'rnn_decoder_dropout_states':.0,'rnn_decoder_hidden_dropout':.0}"
 
 # map function for mapping hyparameters into the same scale
-# choose from ['log', 'exp', 'identity']
-map_func="{'rnn_num_hidden':'log','batch_size':'log'}"
+# choose from ['log', 'exp', 'identity_int']
+map_func="{'rnn_num_hidden':'log','batch_size':'log','num_layers':'identity_int','num_src_embed':'log','num_trg_embed':'log','initial_learning_rate':'exp','bpe_symbols_src':'log','bpe_symbols_trg':'log','embed_src_dropout':'exp','embed_trg_dropout':'exp','rnn_encoder_dropout_outputs':'exp','rnn_decoder_dropout_outputs':'exp','rnn_encoder_dropout_states':'exp','rnn_decoder_dropout_states':'exp','rnn_decoder_hidden_dropout':'exp'}"
 
 # current generation
 n_generation=0

@@ -61,7 +61,13 @@ $py_cmd -m sockeye.train -s ${train_bpe}.$src \
                         --batch-size $batch_size \
                         --min-num-epochs $min_num_epochs \
                         --embed-dropout $embed_dropout \
+                        --rnn-dropout-inputs $rnn_dropout_inputs \
+                        --rnn-dropout-states $rnn_dropout_states \
+                        --rnn-decoder-hidden-dropout $rnn_decoder_hidden_dropout \
+                        --initial-learning-rate $initial_learning_rate \
                         --keep-last-params $keep_last_params \
+                        --decode-and-evaluate -1 \
+                        --decode-and-evaluate-use-cpu \
                         --use-tensorboard \
                         $device \
                         -o $model_path

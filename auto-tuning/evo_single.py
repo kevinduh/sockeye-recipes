@@ -9,9 +9,13 @@ from collections import OrderedDict
 funcs = {'log': lambda x: np.log(x),
          'exp': lambda x: np.exp(x),
          'identity': lambda x: x}
+# inverse_funcs
+# 'log': 'exp' positive integer
+# 'exp': 'log' positive
+# 'indentity_int': positive integer
 inverse_funcs = {'log': lambda x: (np.around(np.exp(np.abs(x))/2)*2).astype(np.int),
                  'exp': lambda x: np.around(np.log(np.abs(x)), decimals=10),
-                 'identity': lambda x: np.abs(x)}
+                 'identity_int': lambda x: np.abs(x).astype(np.int)}
 
 def get_arguments():
     parser = argparse.ArgumentParser(description=None)
@@ -65,8 +69,8 @@ def evolution(args):
         with open(args.scr) as f:
             # read score file
             scores = f.readlines()
-        # get perplexity-val for each model as metric
-        Y = list(map(lambda x: -float(x.strip().split("\t")[-1]), scores))
+        # get bleu-val for each model as metric
+        Y = list(map(lambda x: float(x.strip().split("\t")[-1]), scores))
         es.tell(X, Y)
 
     # save current checkpoint
