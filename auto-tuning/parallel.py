@@ -35,9 +35,9 @@ def run_train_gpu(n_pop):
     logging.info("Finish training model %s ......"%(str(n_pop)))
 
 def run_train_cpu(n_pop):
-    logging.info("Start training model %s ......"%(str(n_pop)))
+    logging.info("(Generation %d) Start training model %s ......"%(args.n_generation, (str(n_pop))))
     os.system("sh " + form_qsub(n_pop))
-    logging.info("Finish training model %s ......"%(str(n_pop)))
+    logging.info("(Generation %d) Finish training model %s ......"%(args.n_generation, (str(n_pop))))
 
 def train_parallel(num_devices, pop, device):
     pool = multiprocessing.Pool(num_devices)

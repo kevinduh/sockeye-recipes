@@ -88,4 +88,4 @@ def evolution(args):
 if __name__ == "__main__":
     args = get_arguments()
     evolution(args)
-    logging.info("Generated %s genes." % args.pop)
+    logging.info("(Generation %d) Generated %s genes." % (args.n_gen,args.pop))
