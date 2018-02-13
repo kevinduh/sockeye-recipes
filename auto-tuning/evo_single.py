@@ -8,7 +8,7 @@ from collections import OrderedDict
 
 funcs = {'log': lambda x: np.log(x),
          'exp': lambda x: np.exp(x),
-         'identity': lambda x: x}
+         'identity_int': lambda x: x}
 # inverse_funcs
 # 'log': 'exp' positive integer
 # 'exp': 'log' positive
