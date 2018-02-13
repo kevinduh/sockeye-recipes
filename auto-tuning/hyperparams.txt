@@ -122,7 +122,7 @@ keep_last_params=1
 
 # hyperparameters to be tuned with initial value
 # make sure every parameter has a corresponding map function
-params="{'rnn_num_hidden':$rnn_num_hidden,'batch_size':$batch_size,'num_layers':$num_layers,'num_src_embed':$num_src_embed,'num_trg_embed':$num_trg_embed,'initial_learning_rate':$initial_learning_rate,'embed_src_dropout':$embed_src_dropout,'embed_trg_dropout':$embed_trg_dropout,'rnn_encoder_dropout_outputs':$rnn_encoder_dropout_outputs,'rnn_decoder_dropout_outputs':rnn_decoder_dropout_outputs,'rnn_encoder_dropout_states':$rnn_encoder_dropout_states,'rnn_decoder_dropout_states':$rnn_decoder_dropout_states,'rnn_decoder_hidden_dropout':$rnn_decoder_hidden_dropout,'num_src_words':$num_src_words,'num_trg_words':$num_trg_words}"
+params="{'rnn_num_hidden':100,'batch_size':64,'num_layers':1,'num_src_embed':50,'num_trg_embed':50,'initial_learning_rate':0.003,'embed_src_dropout':.0,'embed_trg_dropout':.0,'rnn_encoder_dropout_outputs':.0,'rnn_decoder_dropout_outputs':.0,'rnn_encoder_dropout_states':.0,'rnn_decoder_dropout_states':.0,'rnn_decoder_hidden_dropout':.0,'num_src_words':4000,'num_trg_words':4000}"
 
 # map function for mapping hyparameters into the same scale
 # choose from ['log', 'exp', 'identity_int']
