@@ -55,7 +55,6 @@ $py_cmd -m sockeye.train -s ${train_bpe}.$src \
                         --checkpoint-frequency $checkpoint_frequency \
                         --num-words $num_words \
                         --word-min-count $word_min_count \
-                        --max-updates $max_updates \
                         --num-layers $num_layers \
                         --rnn-cell-type $rnn_cell_type \
                         --batch-size $batch_size \
@@ -77,4 +76,5 @@ $py_cmd $autotunedir/reporter.py \
         --scr $eval_scr \
         --pop $population \
         --n-pop $n_population \
-        --n-gen $n_generation
+        --n-gen $n_generation \
+        --model-path $model_path
