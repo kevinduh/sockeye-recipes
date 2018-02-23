@@ -71,10 +71,6 @@ for ((n_generation=$n_generation;n_generation<$generation;n_generation++))
         --generation-path $generation_path \
         --gene $gene \
         --n-generation $n_generation
-
-        ##########################################
-        # (1.4) remove generated useless files
-        rm ~/train.sh.*
         
 
     done
