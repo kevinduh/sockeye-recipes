@@ -72,26 +72,29 @@ $py_cmd -m sockeye.train -s ${train_bpe}.$src \
 
 # check whether training finished
 state_file="${model_path}training_state"
+metrics_file="${model_path}metrics"
 if [ ! -f $state_file ]; then 
-    # compute bleu on validation set
-    # basic settings
-    multibleu=$rootdir/tools/multi-bleu.perl
-    # path to evaluation score path
-    eval_scr="${model_path}multibleu.valid_bpe.result"
-    # use the checkpoint that has the best params
-    output="${model_path}out.valid_bpe.best"
-    if [ ! -f $output ]; then
-    python -m sockeye.translate --models ${model_path} $device < $valid_bpe.$src > $output
-    fi
-    # compute bleu
-    $multibleu $valid_bpe.$trg < $output >> $eval_scr
+    if [ -f $metrics_file ]; then
+        # compute bleu on validation set
+        # basic settings
+        multibleu=$rootdir/tools/multi-bleu.perl
+        # path to evaluation score path
+        eval_scr="${model_path}multibleu.valid_bpe.result"
+        # use the checkpoint that has the best params
+        output="${model_path}out.valid_bpe.best"
+        if [ ! -f $output ]; then
+        python -m sockeye.translate --models ${model_path} $device < $valid_bpe.$src > $output
+        fi
+        # compute bleu
+        $multibleu $valid_bpe.$trg < $output >> $eval_scr
 
-    # report the score
-    $py_cmd $autotunedir/reporter.py \
-            --trg ${generation_path}genes.scr \
-            --scr $eval_scr \
-            --pop $population \
-            --n-pop $n_population \
-            --n-gen $n_generation \
-            --model-path $model_path
+        # report the score
+        $py_cmd $autotunedir/reporter.py \
+                --trg ${generation_path}genes.scr \
+                --scr $eval_scr \
+                --pop $population \
+                --n-pop $n_population \
+                --n-gen $n_generation \
+                --model-path $model_path
+    fi
 fi

@@ -34,7 +34,7 @@ def run_train_gpu(n_pop):
     # if the "training_state" file exists in the model directory
     # then it implies the model has not finished training
     state_file = os.path.join(args.generation_path, "model_%s/training_state"%(str(n_pop).zfill(2)))
-    log_file = os.path.join(args.generation_path, "model_%s/log"%(str(n_pop).zfill(2)))
+    #log_file = os.path.join(args.generation_path, "model_%s/log"%(str(n_pop).zfill(2)))
     while((not os.path.exists(metrics_file)) or (os.path.exists(state_file))): #os.popen("tail -1 %s"%log_file).read().startwith("OSError"))
         os.system(qsub_sh + form_qsub(n_pop))
     logging.info("(Generation %d) Finish training model %s ......"%(args.n_generation, str(n_pop)))
@@ -42,10 +42,8 @@ def run_train_gpu(n_pop):
 def run_train_cpu(n_pop):
     logging.info("(Generation %d) Start training model %s ......"%(args.n_generation, (str(n_pop))))
     metrics_file = os.path.join(args.generation_path, "model_%s/metrics"%(str(n_pop).zfill(2)))
-    # if the "training_state" file exists in the model directory
-    # then it implies the model has not finished training
     state_file = os.path.join(args.generation_path, "model_%s/training_state"%(str(n_pop).zfill(2)))
-    log_file = os.path.join(args.generation_path, "model_%s/log"%(str(n_pop).zfill(2)))
+    #log_file = os.path.join(args.generation_path, "model_%s/log"%(str(n_pop).zfill(2)))
     while((not os.path.exists(metrics_file)) or (os.path.exists(state_file))):
         os.system("sh " + form_qsub(n_pop))
     logging.info("(Generation %d) Finish training model %s ......"%(args.n_generation, (str(n_pop))))
