@@ -14,10 +14,10 @@ source $1
 
 # options for cpu vs gpu training (may need to modify for different grids)
 if [ $2 == "cpu" ]; then
-    source activate sockeye_cpu
+    source activate sockeye_cpu_dev
     device="--use-cpu"
 else
-    source activate sockeye_gpu
+    source activate sockeye_gpu_dev
     module load cuda80/toolkit
     gpu_id=`$rootdir/scripts/get-gpu.sh`
     device="--device-id $gpu_id"
