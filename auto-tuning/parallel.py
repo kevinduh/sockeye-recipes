@@ -37,7 +37,6 @@ def run_train_gpu(n_pop):
     log_file = os.path.join(args.generation_path, "model_%s/log"%(str(n_pop).zfill(2)))
     while((not os.path.exists(metrics_file)) or (os.path.exists(state_file))): #os.popen("tail -1 %s"%log_file).read().startwith("OSError"))
         os.system(qsub_sh + form_qsub(n_pop))
-    os.system(qsub_sh + args.autotunedir + "/compute_bleu.sh " + args.hyperparams + " gpu")
     logging.info("(Generation %d) Finish training model %s ......"%(args.n_generation, str(n_pop)))
 
 def run_train_cpu(n_pop):
@@ -49,7 +48,6 @@ def run_train_cpu(n_pop):
     log_file = os.path.join(args.generation_path, "model_%s/log"%(str(n_pop).zfill(2)))
     while((not os.path.exists(metrics_file)) or (os.path.exists(state_file))):
         os.system("sh " + form_qsub(n_pop))
-    os.system(qsub_sh + args.autotunedir + "/compute_bleu.sh " + args.hyperparams + " cpu")
     logging.info("(Generation %d) Finish training model %s ......"%(args.n_generation, (str(n_pop))))
 
 def train_parallel(num_devices, pop, device):
