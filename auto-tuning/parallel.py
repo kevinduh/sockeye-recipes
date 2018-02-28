@@ -4,7 +4,7 @@ from logger import *
 import argparse
 
 # command for submitting gpu task
-qsub_sh = "qsub -sync y -l 'gpu=1' -q g.q " 
+qsub_sh = "qsub -sync y -l 'gpu=1,mem_free=12g,ram_free=12g' -q g.q " 
 
 def get_arguments():
     parser = argparse.ArgumentParser(description=None)
@@ -31,14 +31,25 @@ def form_qsub(n_pop):
 def run_train_gpu(n_pop):
     logging.info("(Generation %d) Start training model %s ......"%(str(n_pop)))
     metrics_file = os.path.join(args.generation_path, "model_%s/metrics"%(str(n_pop).zfill(2)))
+    # if the "training_state" file exists in the model directory
+    # then it implies the model has not finished training
+    state_file = os.path.join(args.generation_path, "model_%s/training_state"%(str(n_pop).zfill(2)))
     log_file = os.path.join(args.generation_path, "model_%s/log"%(str(n_pop).zfill(2)))
-    while((not os.path.exists(metrics_file)) or os.popen("tail -1 %s"%log_file).read().startwith("OSError")):
+    while((not os.path.exists(metrics_file)) or (os.path.exists(state_file))): #os.popen("tail -1 %s"%log_file).read().startwith("OSError"))
         os.system(qsub_sh + form_qsub(n_pop))
+    os.system(qsub_sh + args.autotunedir + "/compute_bleu.sh " + args.hyperparams + " gpu")
     logging.info("(Generation %d) Finish training model %s ......"%(str(n_pop)))
 
 def run_train_cpu(n_pop):
     logging.info("(Generation %d) Start training model %s ......"%(args.n_generation, (str(n_pop))))
-    os.system("sh " + form_qsub(n_pop))
+    metrics_file = os.path.join(args.generation_path, "model_%s/metrics"%(str(n_pop).zfill(2)))
+    # if the "training_state" file exists in the model directory
+    # then it implies the model has not finished training
+    state_file = os.path.join(args.generation_path, "model_%s/training_state"%(str(n_pop).zfill(2)))
+    log_file = os.path.join(args.generation_path, "model_%s/log"%(str(n_pop).zfill(2)))
+    while((not os.path.exists(metrics_file)) or (os.path.exists(state_file))):
+        os.system("sh " + form_qsub(n_pop))
+    os.system(qsub_sh + args.autotunedir + "/compute_bleu.sh " + args.hyperparams + " cpu")
     logging.info("(Generation %d) Finish training model %s ......"%(args.n_generation, (str(n_pop))))
 
 def train_parallel(num_devices, pop, device):

@@ -71,7 +71,6 @@ for ((n_generation=$n_generation;n_generation<$generation;n_generation++))
         --generation-path $generation_path \
         --gene $gene \
         --n-generation $n_generation
-        
 
     done
 

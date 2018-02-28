@@ -37,13 +37,14 @@ fi
 
 model_path="${generation_path}model_$(printf "%02d" "$n_population")/"
 # path to evaluation score path
-eval_scr="${model_path}metrics"
+eval_scr="${model_path}multibleu.valid_bpe.result"
 
 mkdir $model_path
 
 # update the tuned hyperparameters
 source $(printf ${gene} $(printf "%02d" ${n_population}))
 
+# train the model
 $py_cmd -m sockeye.train -s ${train_bpe}.$src \
                         -t ${train_bpe}.$trg \
                         -vs ${valid_bpe}.$src \
@@ -65,12 +66,27 @@ $py_cmd -m sockeye.train -s ${train_bpe}.$src \
                         --rnn-decoder-hidden-dropout $rnn_decoder_hidden_dropout \
                         --initial-learning-rate $initial_learning_rate \
                         --keep-last-params $keep_last_params \
-                        --decode-and-evaluate -1 \
-                        --decode-and-evaluate-use-cpu \
                         --use-tensorboard \
                         $device \
                         -o $model_path
+#                       --decode-and-evaluate -1 \
+#                       --decode-and-evaluate-use-cpu \
 
+# compute bleu on validation set
+# basic settings
+multibleu=$rootdir/tools/multi-bleu.perl
+step=1
+resultlog=${model_path}multibleu.valid_bpe.result
+rm $resultlog
+# use the checkpoint that has the best params
+output = ${model_path}out.valid_bpe.best
+if [ ! -f $output ]; then
+python -m sockeye.translate --models ${model_path} $device < $valid_bpe.$src > $output
+fi
+# compute bleu
+$multibleu $valid_bpe.$trg < $output >> $resultlog
+
+# report the score
 $py_cmd $autotunedir/reporter.py \
         --trg ${generation_path}genes.scr \
         --scr $eval_scr \

@@ -25,12 +25,14 @@ def read_scr_file(args):
         scores_raw = f.readlines()
 
     # scores = # of iteration * {'avg-sec-per-sent-val', 'bleu-val', 'chrf-val', 'perplexity-train', 'perplexity-val', 'time-elapsed', 'used-gpu-memory'}
-    scores = list(map(lambda x: x.strip().replace('=','\t').split('\t')[1:], scores_raw))
-    scores = list(map(lambda x: {x[i]:float(x[i+1]) for i in range(0, len(x), 2)}, scores))
+    # scores = list(map(lambda x: x.strip().replace('=','\t').split('\t')[1:], scores_raw))
+    # scores = list(map(lambda x: {x[i]:float(x[i+1]) for i in range(0, len(x), 2)}, scores))
+    bleu = float(scores_raw[0].split(",")[0].split('=')[-1])
 
-    logging.info("File: %s, # of evaluation records: %s" %
-                 (args.scr, len(scores)))
-    return np.array(scores)
+    #logging.info("File: %s, # of evaluation records: %s" %
+    #             (args.scr, len(scores)))
+    #return np.array(scores)
+    return bleu
 
 # write the bleu score for the last iteration of the model into genes.scr
 def report(args, rst):
@@ -58,12 +60,14 @@ def report(args, rst):
 
 if __name__ == "__main__":
     args = get_arguments()
-    scores = read_scr_file(args)
+    #scores = read_scr_file(args)
+    bleu = read_scr_file(args)
     # report perplexity-val
     # report(args, scores[-1]['perplexity-val'])
 
     # report bleu-val
-    report(args, scores[-1]['bleu-val'])
+    # report(args, scores[-1]['bleu-val'])
+    report(args, bleu)
 
     # remove decode.output files except the last one
     decode_files = list(filter(lambda x: "decode.output" in x, os.listdir(args.model_path)))
