@@ -36,9 +36,6 @@ else
 fi
 
 model_path="${generation_path}model_$(printf "%02d" "$n_population")/"
-# path to evaluation score path
-eval_scr="${model_path}multibleu.valid_bpe.result"
-
 mkdir $model_path
 
 # update the tuned hyperparameters
@@ -76,6 +73,8 @@ $py_cmd -m sockeye.train -s ${train_bpe}.$src \
 # compute bleu on validation set
 # basic settings
 multibleu=$rootdir/tools/multi-bleu.perl
+# path to evaluation score path
+eval_scr="${model_path}multibleu.valid_bpe.result"
 # use the checkpoint that has the best params
 output="${model_path}out.valid_bpe.best"
 if [ ! -f $output ]; then
