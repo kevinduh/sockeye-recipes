@@ -76,4 +76,4 @@ if __name__ == "__main__":
         os.remove(os.path.join(args.model_path,f))
 
     # remove generated useless files
-    os.system("rm ~/train.sh.*")
+#    os.system("rm ~/train.sh.*")
