@@ -76,14 +76,13 @@ $py_cmd -m sockeye.train -s ${train_bpe}.$src \
 # compute bleu on validation set
 # basic settings
 multibleu=$rootdir/tools/multi-bleu.perl
-resultlog="${model_path}multibleu.valid_bpe.result"
 # use the checkpoint that has the best params
-output = "${model_path}out.valid_bpe.best"
+output="${model_path}out.valid_bpe.best"
 if [ ! -f $output ]; then
 python -m sockeye.translate --models ${model_path} $device < $valid_bpe.$src > $output
 fi
 # compute bleu
-$multibleu $valid_bpe.$trg < $output >> $resultlog
+$multibleu $valid_bpe.$trg < $output >> $eval_scr
 
 # report the score
 $py_cmd $autotunedir/reporter.py \
