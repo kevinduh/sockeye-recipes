@@ -4,7 +4,6 @@
 module load cuda80/toolkit
 
 if [ $CUDA_VISIBLE_DEVICES ]; then
-    echo "$CUDA_VISIBLE_DEVICES hre" > ~/tmp.getgpu
     # if CUDA_VISIBLE_DEVICES is already set, just return 0
     echo 0
 
