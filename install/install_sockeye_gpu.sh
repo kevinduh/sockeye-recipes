@@ -15,3 +15,7 @@ cd sockeye
 git checkout 762ce78e4e49b9ba5d14eb0a48d97f19c8807707 # version 1.16.2 
 pip install -r requirements.gpu-cu80.txt
 python setup.py install
+
+# 3. install optional dependencies
+pip install tensorboard==1.0.0a6
+pip install matplotlib

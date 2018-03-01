@@ -49,5 +49,6 @@ python -m sockeye.train -s ${train_bpe}.$src \
                         --min-num-epochs $min_num_epochs \
                         --embed-dropout $embed_dropout \
                         --keep-last-params $keep_last_params \
+                        --use-tensorboard \
                         $device \
                         -o $modeldir
