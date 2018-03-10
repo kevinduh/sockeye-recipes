@@ -150,7 +150,7 @@ cp examples/hyperparams.wmt14-en-de.txt sockeye_trial2/
 cd sockeye_trial2
 ```
 
-Before running wmt14-en-de.sh, make sure to modify rootdir in the hyperparameters file to point to your sockeye-recipes directory. If you saved the data in a different directory, make sure to modify train_tok and valid_tok. If you are using a different workdir to keep results, modify that in the hyperparameters file too. According to the hyperparams.wmt14-en-de.txt file, note the model will be trained on train.{en,de} (train_tok) and validated on newstest2014 (valid_tok). 
+Before running wmt14-en-de.sh, make sure to modify rootdir in the hyperparameters file to point to your sockeye-recipes directory. If you saved the data in a different directory, make sure to modify train_tok and valid_tok. If you are using a different workdir to keep results, modify that in the hyperparameters file too. According to the hyperparams.wmt14-en-de.txt file, note the model will be trained on train.{en,de} (train_tok) and validated on newstest2013 (valid_tok). 
 
 ```bash
 sh wmt14-en-de.sh
