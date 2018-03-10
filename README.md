@@ -29,6 +29,17 @@ sh ./install/install_tools.sh
 The training scripts and recipes will activate either the sockeye_cpu or sockeye_gpu environment depending on whether CPU or GPU is specified. 
 The third install_tools.sh script simply installs some helper tools, such as BPE preprocesser.
 
+#### Re-Install
+
+When the sockeye version is updated, it is recommended to re-run the installation scripts in a clean conda environment:
+
+```bash
+conda remove --name sockeye_gpu --all
+conda remove --name sockeye_cpu --all
+sh ./install/install_sockeye_cpu.sh
+sh ./install/install_sockeye_gpu.sh
+```
+
 #### Environment Setup
 To set up the running environment, we add the following configurations in the ~/.bashrc file.
 
