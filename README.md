@@ -30,7 +30,7 @@ The training scripts and recipes will activate either the sockeye_cpu or sockeye
 The third install_tools.sh script simply installs some helper tools, such as BPE preprocesser.
 
 
-## Example Run
+## Example Run (fast)
 We will train a model on some sample German-English data.
 
 (1) Download and unpack the data in any directory. Let's make our working directory "sockeye_trial" in this example:
@@ -109,6 +109,28 @@ sh path/to/sockeye-recipes/scripts/translate.sh modeldir bpe_vocab_src input out
 ```
 
 Note that this script does not require a hyperparams file. One simply needs to point to the modeldir and the BPE source vocabulary (usually in datadir) in order to start up a translation service.
+
+
+## Example Run 2 (WMT14 English-German)
+
+This example trains on a full English-German dataset of 4.5 million sentence pairs, drawn from WMT14 and packaged by <a href="https://nlp.stanford.edu/projects/nmt/">Stanford</a>. The results should be comparable to the <a href="https://nlp.stanford.edu/pubs/emnlp15_attn.pdf">Luong EMNLP2015 paper</a>.
+
+We will copy over the script "wmt14-en-de.sh" and hyperparameter file "hyperparams.wmf14-en-de.txt" to your working directory "sockeye_trial2". The script downloads the data, runs BPE preprocessing and starts off a training process via qsub:
+
+```bash
+mkdir sockeye_trial2
+cp examples/wmt14-en-de.sh sockeye_trial2/
+cp examples/hyperparams.wmt14-en-de.txt sockeye_trial2/
+cd sockeye_trial2
+```
+
+Before running wmt14-en-de.sh, make sure to modify rootdir in the hyperparameters file to point to your sockeye-recipes directory. If you saved the data in a different directory, make sure to modify train_tok and valid_tok. If you are using a different workdir to keep results, modify that in the hyperparameters file too.
+
+```bash
+sh wmt14-en-de.sh
+```
+
+The downloading/preprocessing part may take up to 2 hours, and training may take up to 6 hours (on a K40 GPU) for this particular hyperparameter configuration. The BLEU score on newstest2014.de after decoding should be around 15.45.
 
 #### Environment Setup
 To set up the running environment, we add the following configurations in the ~/.bashrc file.
