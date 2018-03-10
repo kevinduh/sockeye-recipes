@@ -131,10 +131,10 @@ Note that for quick demonstration, this example uses very small data and very sh
 (6) Finally, we can translate new test sets with:
 
 ```bash
-sh path/to/sockeye-recipes/scripts/translate.sh modeldir bpe_vocab_src input output device(cpu/gpu)
+sh path/to/sockeye-recipes/scripts/translate.sh hyperparams.sample-de-en.2.txt input output device(cpu/gpu)
 ```
 
-Note that this script does not require a hyperparams file. One simply needs to point to the modeldir and the BPE source vocabulary (usually in datadir) in order to start up a translation service.
+This script will find the model from hyperparams file. Then it runs BPE on the input (which is assumed to be tokenized in the same way as train_tok and valid_tok), translates the result, runs de-BPE and saves in output. 
 
 
 ## Full Example Run (WMT14 English-German)
