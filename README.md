@@ -1,7 +1,7 @@
 # sockeye-recipes
 Training scripts and recipes for the Sockeye Neural Machine Translation (NMT) toolkit
 - The original Sockeye codebase is at [AWS Labs](https://github.com/awslabs/sockeye)
-- This version is based off [a stable fork](https://github.com/kevinduh/sockeye)
+- This version is based off [a stable fork](https://github.com/kevinduh/sockeye). The current sockeye version that sockeye-recipes is built on is: 1.16.2. 
 
 This package contains scripts that makes it easy to run NMT experiments.
 The way to use this package is to specify settings in a file like "hyperparams.txt", 
@@ -29,9 +29,24 @@ sh ./install/install_tools.sh
 The training scripts and recipes will activate either the sockeye_cpu or sockeye_gpu environment depending on whether CPU or GPU is specified. 
 The third install_tools.sh script simply installs some helper tools, such as BPE preprocesser.
 
+#### Environment Setup
+To set up the running environment, we add the following configurations in the ~/.bashrc file.
 
-## Example Run (fast)
-We will train a model on some sample German-English data.
+Configure CUDA and CuDNN for the GPU version of Sockeye:
+
+```bash
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
+```
+
+Set up a clean UTF-8 environment to avoid encoding errors:
+
+```bash
+export LANG=en_US.UTF-8
+```
+
+
+## Quick Example Run
+We will train a model on a very small sample German-English data, just to confirm our installation works. The whole process should take less than 30 minutes. Since the data is so small, you should not expect the model to learn anything. 
 
 (1) Download and unpack the data in any directory. Let's make our working directory "sockeye_trial" in this example:
 ```bash
@@ -111,7 +126,7 @@ sh path/to/sockeye-recipes/scripts/translate.sh modeldir bpe_vocab_src input out
 Note that this script does not require a hyperparams file. One simply needs to point to the modeldir and the BPE source vocabulary (usually in datadir) in order to start up a translation service.
 
 
-## Example Run 2 (WMT14 English-German)
+## Full Example Run (WMT14 English-German)
 
 This example trains on a full English-German dataset of 4.5 million sentence pairs, drawn from WMT14 and packaged by <a href="https://nlp.stanford.edu/projects/nmt/">Stanford</a>. The results should be comparable to the <a href="https://nlp.stanford.edu/pubs/emnlp15_attn.pdf">Luong EMNLP2015 paper</a>.
 
@@ -124,7 +139,7 @@ cp examples/hyperparams.wmt14-en-de.txt sockeye_trial2/
 cd sockeye_trial2
 ```
 
-Before running wmt14-en-de.sh, make sure to modify rootdir in the hyperparameters file to point to your sockeye-recipes directory. If you saved the data in a different directory, make sure to modify train_tok and valid_tok. If you are using a different workdir to keep results, modify that in the hyperparameters file too.
+Before running wmt14-en-de.sh, make sure to modify rootdir in the hyperparameters file to point to your sockeye-recipes directory. If you saved the data in a different directory, make sure to modify train_tok and valid_tok. If you are using a different workdir to keep results, modify that in the hyperparameters file too. According to the hyperparams.wmt14-en-de.txt file, note the model will be trained on train.{en,de} (train_tok) and validated on newstest2014 (valid_tok). 
 
 ```bash
 sh wmt14-en-de.sh
@@ -132,20 +147,9 @@ sh wmt14-en-de.sh
 
 The downloading/preprocessing part may take up to 2 hours, and training may take up to 6 hours (on a K40 GPU) for this particular hyperparameter configuration. The BLEU score on newstest2014.de after decoding should be around 15.45.
 
-#### Environment Setup
-To set up the running environment, we add the following configurations in the ~/.bashrc file.
+## Auto-Tuning ##
 
-Configure CUDA and CuDNN for the GPU version of Sockeye:
-
-```bash
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
-```
-
-Set up a clean UTF-8 environment to avoid encoding errors:
-
-```bash
-export LANG=en_US.UTF-8
-```
+This package also provides tools for auto-tuning, where one can specify the hyperparameters to search over and a meta-optimizer automatically attempts to try different configurations that it believes will be promising. For more information, see the auto-tuning folder. 
 
 
 ## Design Principles and Suggested Usage
