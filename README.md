@@ -9,6 +9,8 @@ then run the following scripts:
 - scripts/preprocess-bpe.sh: Preprocess bitext via BPE segmentation
 - scripts/train.sh: Train the NMT model given bitext
 - scripts/plot-validation-curve.sh: Compute BLEU curves by iteration on validation data
+- scripts/translate.sh: Translates a tokenized input file using an existing model
+
 
 ## Installation
 First, clone this package: 
@@ -144,7 +146,7 @@ source activate sockeye_cpu
 tensorboard --logdir ~/sockeye_trial/model1
 ```
 
-Then follow the instructions, e.g. pointing your browser to http://localhost:6006 . Note that note all features of Google's tensorboard is implemented in this DMLC MXNet port, but at least you can currently visualize perplexity curves and a few other things.  
+Then follow the instructions, e.g. pointing your browser to http://localhost:6006 . Note that not all features of Google's tensorboard is implemented in this DMLC MXNet port, but at least you can currently visualize perplexity curves and a few other things.  
 
 
 ## Full Example Run (WMT14 English-German)
