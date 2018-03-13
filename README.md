@@ -137,6 +137,16 @@ bash path/to/sockeye-recipes/scripts/translate.sh hyperparams.sample-de-en.2.txt
 This script will find the model from hyperparams file. Then it runs BPE on the input (which is assumed to be tokenized in the same way as train_tok and valid_tok), translates the result, runs de-BPE and saves in output. 
 
 
+(7) To visualize the learning curve, you can use tensorboard:
+
+```bash
+source activate sockeye_cpu
+tensorboard --logdir ~/sockeye_trial/model1
+```
+
+Then follow the instructions, e.g. pointing your browser to http://localhost:6006 . Note that note all features of Google's tensorboard is implemented in this DMLC MXNet port, but at least you can currently visualize perplexity curves and a few other things.  
+
+
 ## Full Example Run (WMT14 English-German)
 
 This example trains on a full English-German dataset of 4.5 million sentence pairs, drawn from WMT14 and packaged by <a href="https://nlp.stanford.edu/projects/nmt/">Stanford</a>. The results should be comparable to the <a href="https://nlp.stanford.edu/pubs/emnlp15_attn.pdf">Luong EMNLP2015 paper</a>.
@@ -173,3 +183,10 @@ Building NMT systems can be a tedious process involving lenghty experimentation 
 - At the end, your workingdir will have a single datadir containing multiple BPE'ed versions of the bitext, and multiple modeldir's. You can run tensorboard on all these modeldir's concurrently to compare learning curves.
 
 There are many options in Sockeye. Currently not all of them are used in sockeye-recipes; more will be added. See [sockeye/arguments.py](https://github.com/kevinduh/sockeye/blob/master/sockeye/arguments.py) for detailed explanations. 
+
+Alternatively, directly call sockeye with the help option as below. Note that sockeye-recipe hyperameters have the same name as sockeye hyperparameters, except that sockeye-recipe hyperparameters replace the hyphen with underscore (e.g. --num-embed in sockeye becomes $num_embed in sockeye-recipes):
+ 
+```bash
+source activate sockeye_cpu
+python -m sockeye.train --help
+```
