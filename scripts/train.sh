@@ -26,8 +26,10 @@ fi
 ###########################################
 # (1) Book-keeping
 mkdir -p $modeldir
-#datenow=`date '+%Y-%m-%d %H:%M:%S'`
 cp $1 $modeldir/hyperparams.txt
+datenow=`date '+%Y-%m-%d %H:%M:%S'`
+echo "Start training: $datenow on $(hostname)" >> $modeldir/cmdline.log
+echo "$0 $@" >> $modeldir/cmdline.log
 
 ###########################################
 # (2) train the model (this may take a while) 
@@ -42,13 +44,21 @@ python -m sockeye.train -s ${train_bpe}.$src \
                         --checkpoint-frequency $checkpoint_frequency \
                         --num-words $num_words \
                         --word-min-count $word_min_count \
-                        --max-updates $max_updates \
                         --num-layers $num_layers \
                         --rnn-cell-type $rnn_cell_type \
                         --batch-size $batch_size \
                         --min-num-epochs $min_num_epochs \
+                        --max-num-epochs $max_num_epochs \
                         --embed-dropout $embed_dropout \
                         --keep-last-params $keep_last_params \
                         --use-tensorboard \
                         $device \
                         -o $modeldir
+
+
+
+
+##########################################
+datenow=`date '+%Y-%m-%d %H:%M:%S'`
+echo "End training: $datenow on $(hostname)" >> $modeldir/cmdline.log
+echo "===========================================" >> $modeldir/cmdline.log

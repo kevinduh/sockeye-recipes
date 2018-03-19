@@ -86,13 +86,13 @@ rnn_cell_type="lstm"
 
 # Training configuration
 max_seq_len="50:50"
-num_words="50000:50000"
+num_words="${bpe_symbols_src}:${bpe_symbols_trg}"
 word_min_count="1:1"
 batch_size=128
-min_num_epochs=0
 embed_dropout=".0:.0"
 
 # Logging and stopping condition
-checkpoint_frequency=1000
-max_updates=20000
-keep_last_params=-1
+checkpoint_frequency=10000
+min_num_epochs=0
+max_num_epochs=2
+keep_last_params=5
