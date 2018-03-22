@@ -168,7 +168,7 @@ Before running wmt14-en-de.sh, make sure to modify rootdir in the hyperparameter
 bash wmt14-en-de.sh
 ```
 
-The downloading/preprocessing part may take up to 2 hours, and training may take up to 6 hours (on a K40 GPU) for this particular hyperparameter configuration. The BLEU score on newstest2014.de after decoding should be around 15.45.
+The downloading/preprocessing part may take up to 2 hours, and training may take up to 20 hours (on a GTX 1080 Ti GPU) for this particular hyperparameter configuration. The BLEU score on newstest2014.de after decoding should be around 19.33.
 
 ## Auto-Tuning ##
 
