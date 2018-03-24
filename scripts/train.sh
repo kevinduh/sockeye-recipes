@@ -52,6 +52,7 @@ python -m sockeye.train -s ${train_bpe}.$src \
                         --embed-dropout $embed_dropout \
                         --keep-last-params $keep_last_params \
                         --use-tensorboard \
+                        --disable-device-locking \
                         $device \
                         -o $modeldir
 
