@@ -34,7 +34,7 @@ set -a
 #####################################################################
 
 ### User-specified directories ###
-workdir=~/sockeye_trial_dev/
+workdir=~/sockeye_trial/
 datadir=$workdir/data
 rootdir=~/my-sockeye-recipes/
 autotunedir=$rootdir/auto-tuning/
@@ -42,7 +42,7 @@ autotunedir=$rootdir/auto-tuning/
 ### Language pair (source and target) ###
 # Note: We assume all bitext files contain these as suffices. 
 # e.g. $train_tok.$src, $train_tok.$trg refer to the source and target 
-src=zh
+src=de
 trg=en
 
 ### Tokenized training and validation data ###
@@ -120,7 +120,7 @@ beam_size=5 #[1,16]
 
 # Logging and stopping condition
 min_num_epochs=15
-max_num_epochs=15
+max_num_epochs=20
 checkpoint_frequency=1000
 keep_last_params=1
 

@@ -26,10 +26,10 @@ n_generation=$7
 
 
 if [ $device == "cpu" ]; then
-    source activate sockeye_cpu_dev
+    source activate sockeye_cpu
     device="--use-cpu"
 else
-    source activate sockeye_gpu_dev
+    source activate sockeye_gpu
     module load cuda80/toolkit
     gpu_id=`$rootdir/scripts/get-gpu.sh`
     device="--device-id $gpu_id"
