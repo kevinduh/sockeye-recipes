@@ -30,7 +30,6 @@ python $subword/learn_bpe.py --input ${train_tok}.$src --output $bpe_vocab_src -
 echo `date '+%Y-%m-%d %H:%M:%S'` "- Applying BPE, creating: ${train_bpe}.$src, ${valid_bpe}.$src" 
 python $subword/apply_bpe.py --input ${train_tok}.$src --codes $bpe_vocab_src --output ${train_bpe}.$src
 python $subword/apply_bpe.py --input ${valid_tok}.$src --codes $bpe_vocab_src --output ${valid_bpe}.$src
-python $subword/apply_bpe.py --input ${test_tok}.$src --codes $bpe_vocab_src --output ${test_bpe}.$src
 
 
 ###########################################
@@ -41,6 +40,5 @@ python $subword/learn_bpe.py --input ${train_tok}.$trg --output $bpe_vocab_trg -
 echo `date '+%Y-%m-%d %H:%M:%S'` "- Applying BPE, creating: ${train_bpe}.$trg, ${valid_bpe}.$trg" 
 python $subword/apply_bpe.py --input ${train_tok}.$trg --codes $bpe_vocab_trg --output ${train_bpe}.$trg
 python $subword/apply_bpe.py --input ${valid_tok}.$trg --codes $bpe_vocab_trg --output ${valid_bpe}.$trg
-python $subword/apply_bpe.py --input ${test_tok}.$trg --codes $bpe_vocab_trg --output ${test_bpe}.$trg
 
 echo `date '+%Y-%m-%d %H:%M:%S'` "- Done with preprocess-bpe.sh"

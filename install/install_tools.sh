@@ -3,7 +3,7 @@ set -e
 
 # install subword nmt
 git submodule init
-git submodule update tools/subword-nmt
+git submodule update --recursive --remote tools/subword-nmt
 
 # install moses scripts
 rootdir="$(readlink -f "$(dirname "$0")/../")"

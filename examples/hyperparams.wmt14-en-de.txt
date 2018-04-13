@@ -31,7 +31,7 @@
 #####################################################################
 
 ### User-specified directories ###
-workdir=~/sockeye_trial/
+workdir=~/sockeye_trial2/
 datadir=$workdir/data
 modeldir=$workdir/model1
 rootdir=/home/hltcoe/kduh/src/mt/sockeye-recipes/
@@ -39,15 +39,15 @@ rootdir=/home/hltcoe/kduh/src/mt/sockeye-recipes/
 ### Language pair (source and target) ###
 # Note: We assume all bitext files contain these as suffices. 
 # e.g. $train_tok.$src, $train_tok.$trg refer to the source and target 
-src=de
-trg=en
+src=en
+trg=de
 
 ### Tokenized training and validation data ###
 # Note we assume tokenization is already done, and will only run BPE
 # For tokenization and other preprocessing, see preprocess-tokenize.sh
 # which does not use this hyperparam.txt file
-train_tok=$workdir/sample-de-en/train
-valid_tok=$workdir/sample-de-en/valid
+train_tok=$workdir/train
+valid_tok=$workdir/newstest2013
 
 
 
@@ -58,8 +58,8 @@ valid_tok=$workdir/sample-de-en/valid
 ### Number of symbols to use for BPE ###
 # Note: we perform source and target BPE separately
 # This corresponds to initial source (src) and target (trg) vocab size
-bpe_symbols_src=4000
-bpe_symbols_trg=4000
+bpe_symbols_src=50000
+bpe_symbols_trg=50000
 
 ### Filename for BPE-processed bitext file ###
 # Note: the following default names should be fine for most use cases
@@ -78,21 +78,21 @@ bpe_vocab_trg=${train_bpe}.$trg.bpe_vocab
 #####################################################################
 
 # Model architecture
-num_embed="50:50"
-rnn_num_hidden=50
+num_embed="1000:1000"
+rnn_num_hidden=1000
 rnn_attention_type="dot"
-num_layers=1
+num_layers=4
 rnn_cell_type="lstm"
 
 # Training configuration
-max_seq_len="100:100"
+max_seq_len="50:50"
 num_words="${bpe_symbols_src}:${bpe_symbols_trg}"
 word_min_count="1:1"
-batch_size=64
+batch_size=128
 embed_dropout=".0:.0"
 
 # Logging and stopping condition
-checkpoint_frequency=100
+checkpoint_frequency=10000
 min_num_epochs=0
-max_num_epochs=5
+max_num_epochs=2
 keep_last_params=5
