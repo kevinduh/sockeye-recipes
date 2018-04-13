@@ -15,65 +15,74 @@ def get_arguments():
     parser.add_argument("--n-pop", type=int, help="current population index")
     parser.add_argument("--n-gen", type=int, help="current generation index")
     parser.add_argument("--model-path", type=str, help="path to current model")
+    parser.add_argument("--autotunedir", help="root directory of the auto-tuning scripts")
+    parser.add_argument("--n-obj", type=int, choices=range(1,3), 
+                        help="number of objective to be optimized,"\
+                             " 1 for BLEU score optimization,"\
+                             " 2 for BLEU score and validation speed.")
+    parser.add_argument("--trg-bleu", help="BLEU scores for each population in one generation")
+    parser.add_argument("--trg-time", help="validation time for each population in one generation")
 
     args = parser.parse_args()
     return args
 
-# read scores from bleu.scr
-def read_scr_file(args):
+ 
+def get_bleu(args):
+    """Read scores from bleu.scr"""
     with open(args.scr) as f:
         scores_raw = f.readlines()
 
-    # scores = # of iteration * {'avg-sec-per-sent-val', 'bleu-val', 'chrf-val', 'perplexity-train', 'perplexity-val', 'time-elapsed', 'used-gpu-memory'}
-    # scores = list(map(lambda x: x.strip().replace('=','\t').split('\t')[1:], scores_raw))
-    # scores = list(map(lambda x: {x[i]:float(x[i+1]) for i in range(0, len(x), 2)}, scores))
     bleu = float(scores_raw[0].split(",")[0].split('=')[-1])
 
-    #logging.info("File: %s, # of evaluation records: %s" %
-    #             (args.scr, len(scores)))
-    #return np.array(scores)
     return bleu
 
-# write the bleu score for the last iteration of the model into genes.scr
-def report(args, rst):
+def get_time(args):
+    """Get validation time"""
+    path1 = os.path.join(args.model_path,"metrics")
+    path2 = os.path.join(args.model_path,"multibleu.valid_bpe.result")
+    time = os.path.getmtime(path2) - os.path.getmtime(path1)
+    return time
+
+
+def report(args, rst, trg):
+    """Write the bleu score for the last iteration of the model into genes.scr"""
     try:
-        with open(args.trg, "r") as f:
+        with open(trg, "r") as f:
             scores = f.readlines()
     except:
-        logging.info("Creating new file: " + args.trg)
-        # os.system("touch " + args.trg)
         scores = []
 
-    with open(args.trg, "w") as f:
+    with open(trg, "w") as f:
         scores = scores + [str(args.n_pop).zfill(2) + "\t" + str(rst) + "\n"]
-        logging.info("collecting: %s" % scores[-1][:-1])
-        logging.info("# of collected score: %s" % len(scores))
         scores = sorted(scores)
         f.writelines(scores)
         f.flush()
 
-    if len(scores) == args.pop:
-        logging.info(
-            "Collected evulation result of all population. start next generation...")
-
-
+def report_bt(args, bleu, time, trg_bleu, trg_time):
+    """Report pareto level based on BLEU score and validation time"""
+    # write the validation time of the model into time.trg
+    report(args, time, trg_time)
+    # write the bleu score for the last iteration of the model into bleu.trg
+    report(args, bleu, trg_bleu)
+    with open(trg_bleu) as f:
+        if len(f.readlines())==args.pop:
+            os.system("python " + args.autotunedir + "pareto.py -l " + trg_bleu + " -s " + trg_time + " >" + args.trg)
 
 if __name__ == "__main__":
     args = get_arguments()
-    #scores = read_scr_file(args)
-    bleu = read_scr_file(args)
-    # report perplexity-val
-    # report(args, scores[-1]['perplexity-val'])
+    bleu = get_bleu(args)
 
-    # report bleu-val
-    # report(args, scores[-1]['bleu-val'])
-    report(args, bleu)
+    if args.n_obj == 1:
+        report(args, bleu, args.trg)
+    else:
+        time = get_time(args)
+        report_bt(args, bleu, time, args.trg_bleu, args.trg_time)
 
     # remove decode.output files except the last one
-    decode_files = list(filter(lambda x: "decode.output" in x, os.listdir(args.model_path)))
-    decode_files.sort()
-    for f in decode_files[:-1]:
-        os.remove(os.path.join(args.model_path,f))
+    # decode_files = list(filter(lambda x: "decode.output" in x, os.listdir(args.model_path)))
+    # decode_files.sort()
+    # for f in decode_files[:-1]:
+    #     os.remove(os.path.join(args.model_path,f))
 
     # remove generated useless files
 #    os.system("rm ~/train.sh.*")

@@ -81,38 +81,47 @@ bpe_vocab_trg=${train_bpe}.$trg.bpe_vocab
 #####################################################################
 
 # Model architecture
-num_src_embed=512
-num_trg_embed=512
-num_embed="${num_src_embed}:${num_trg_embed}"
-rnn_num_hidden=1024
-attention_type="dot"
-num_layers=1
-rnn_cell_type="lstm"
+num_src_embed=512 #[64,1024]
+num_trg_embed=512 #[64,1024]
+# num_embed="${num_src_embed}:${num_trg_embed}"
+rnn_num_hidden=1024 #[64,2048]
+num_layers=1 #[1,2]
 
 # Training configuration
-max_seq_len="100:100"
-num_src_words=5000
-num_trg_words=5000
-num_words="${num_src_words}:${num_trg_words}"
-word_min_count="1:1"
-batch_size=64
-min_num_epochs=15
+max_seq_len="100:100" # do not change
+num_src_words=5000 #[2000,80000]
+num_trg_words=5000 #[2000,80000]
+# num_words="${num_src_words}:${num_trg_words}"
+word_src_count=1 #[1,2]
+word_trg_count=1 #[1,2]
+# word_min_count="${word_src_count}:${word_trg_count}"
+batch_size=64 #[16,256]
+
+# dropout: [0,0.8]
 embed_src_dropout=.0
 embed_trg_dropout=.0
-embed_dropout="${embed_src_dropout}:${embed_trg_dropout}"
+# embed_dropout="${embed_src_dropout}:${embed_trg_dropout}"
 rnn_encoder_dropout_outputs=.0
 rnn_decoder_dropout_outputs=.0
-rnn_dropout_inputs="${rnn_encoder_dropout_outputs}:${rnn_decoder_dropout_outputs}"
+# rnn_dropout_inputs="${rnn_encoder_dropout_outputs}:${rnn_decoder_dropout_outputs}"
 rnn_encoder_dropout_states=.0
 rnn_decoder_dropout_states=.0
-rnn_dropout_states="${rnn_encoder_dropout_states}:${rnn_decoder_dropout_states}"
+# rnn_dropout_states="${rnn_encoder_dropout_states}:${rnn_decoder_dropout_states}"
 rnn_decoder_hidden_dropout=.0
 
-initial_learning_rate=0.003
+initial_learning_rate=0.003 #[0.0001,0.1]
+
+# tune manually (outside cmaes)
+optimizer="adam" # adam, sgd, rmsprop
+rnn_cell_type="lstm" # lstm, gru(speed)
+attention_type="dot" # dot, bilinear, dot_scaled, coverage
+beam_size=5 #[1,16]
+
 
 # Logging and stopping condition
+min_num_epochs=15
+max_num_epochs=15
 checkpoint_frequency=1000
-max_updates=4000000
 keep_last_params=1
 
 
@@ -121,12 +130,28 @@ keep_last_params=1
 #####################################################################
 
 # hyperparameters to be tuned with initial value
-# make sure every parameter has a corresponding map function
-params="{'rnn_num_hidden':1024,'batch_size':64,'num_layers':1,'num_src_embed':512,'num_trg_embed':512,'initial_learning_rate':0.003,'embed_src_dropout':.0,'embed_trg_dropout':.0,'rnn_encoder_dropout_outputs':.0,'rnn_decoder_dropout_outputs':.0,'rnn_encoder_dropout_states':.0,'rnn_decoder_dropout_states':.0,'rnn_decoder_hidden_dropout':.0,'num_src_words':4000,'num_trg_words':4000}"
+params="{'num_src_embed':512,"\
+"'num_trg_embed':512,"\
+"'rnn_num_hidden':1024,"\
+"'num_layers':1,"\
+"'num_src_words':5000,"\
+"'num_trg_words':5000,"\
+"'word_src_count':1,"\
+"'word_trg_count':1,"\
+"'batch_size':64,"\
+"'embed_src_dropout':.0,"\
+"'embed_trg_dropout':.0,"\
+"'rnn_encoder_dropout_outputs':.0,"\
+"'rnn_decoder_dropout_outputs':.0,"\
+"'rnn_encoder_dropout_states':.0,"\
+"'rnn_decoder_dropout_states':.0,"\
+"'rnn_decoder_hidden_dropout':.0,"\
+"'initial_learning_rate':0.003"\
+"}"
 
-# map function for mapping hyparameters into the same scale
-# choose from ['log', 'exp', 'identity_int']
-map_func="{'rnn_num_hidden':'log','batch_size':'log','num_layers':'identity_int','num_src_embed':'log','num_trg_embed':'log','initial_learning_rate':'exp','embed_src_dropout':'exp','embed_trg_dropout':'exp','rnn_encoder_dropout_outputs':'exp','rnn_decoder_dropout_outputs':'exp','rnn_encoder_dropout_states':'exp','rnn_decoder_dropout_states':'exp','rnn_decoder_hidden_dropout':'exp','num_src_words':'log','num_trg_words':'log'}"
+# number of optimization objectives
+# 1 for bleu, 2 for bleu and time
+n_object=1
 
 # current generation
 n_generation=0
