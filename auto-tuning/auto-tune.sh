@@ -4,7 +4,7 @@
 # Using Sockeye and CMA-ES algorithm
 
 if [ $# -ne 3 ]; then
-    echo "Usage: auto-tune.sh hyperparams.txt device(gpu/cpu) num_devices"
+    echo "Usage: auto-tune.sh hyperparams.txt device(gpu/checkpoint_pathu) num_devices"
     exit
 fi
 
@@ -51,11 +51,10 @@ for ((n_generation=$n_generation;n_generation<$generation;n_generation++))
         ###########################################
         # (1.2) generate and record genes for current generation
         # save current generation information as a checkpoint
-        $py_cmd evo_single.py \
+        $py_cmd evo.py \
         --checkpoint $checkpoint \
         --gene $gene \
         --params ${params} \
-        --map-func $map_func \
         --scr ${prev_generation_path}genes.scr \
         --pop $population \
         --n-gen $n_generation 

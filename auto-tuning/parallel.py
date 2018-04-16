@@ -5,6 +5,8 @@ import argparse
 
 # command for submitting gpu task
 qsub_sh = "qsub -sync y -l 'gpu=1,mem_free=12g,ram_free=12g' -q g.q " 
+# command for submitting gpu task on AWS GPU machines
+# qsub_sh = "sh "
 
 def get_arguments():
     parser = argparse.ArgumentParser(description=None)

@@ -26,10 +26,10 @@ n_generation=$7
 
 
 if [ $device == "cpu" ]; then
-    source activate sockeye_cpu_dev
+    source activate sockeye_cpu
     device="--use-cpu"
 else
-    source activate sockeye_gpu_dev
+    source activate sockeye_gpu
     module load cuda80/toolkit
     gpu_id=`$rootdir/scripts/get-gpu.sh`
     device="--device-id $gpu_id"
@@ -46,25 +46,27 @@ $py_cmd -m sockeye.train -s ${train_bpe}.$src \
                         -t ${train_bpe}.$trg \
                         -vs ${valid_bpe}.$src \
                         -vt ${valid_bpe}.$trg \
-                        --num-embed $num_embed \
+                        --num-embed ${num_src_embed}:${num_trg_embed} \
                         --rnn-num-hidden $rnn_num_hidden \
                         --rnn-attention-type $attention_type \
                         --max-seq-len $max_seq_len \
                         --checkpoint-frequency $checkpoint_frequency \
-                        --num-words $num_words \
-                        --word-min-count $word_min_count \
-                        --max-updates $max_updates \
+                        --num-words ${num_src_words}:${num_trg_words} \
+                        --word-min-count ${word_src_count}:${word_trg_count} \
+                        --optimizer $optimizer \
                         --num-layers $num_layers \
                         --rnn-cell-type $rnn_cell_type \
                         --batch-size $batch_size \
                         --min-num-epochs $min_num_epochs \
-                        --embed-dropout $embed_dropout \
-                        --rnn-dropout-inputs $rnn_dropout_inputs \
-                        --rnn-dropout-states $rnn_dropout_states \
+                        --max-num-epochs $max_num_epochs \
+                        --embed-dropout ${embed_src_dropout}:${embed_trg_dropout} \
+                        --rnn-dropout-inputs ${rnn_encoder_dropout_outputs}:${rnn_decoder_dropout_outputs} \
+                        --rnn-dropout-states ${rnn_encoder_dropout_states}:${rnn_decoder_dropout_states} \
                         --rnn-decoder-hidden-dropout $rnn_decoder_hidden_dropout \
                         --initial-learning-rate $initial_learning_rate \
                         --keep-last-params $keep_last_params \
                         --use-tensorboard \
+                        --disable-device-locking \
                         $device \
                         -o $model_path
 #                       --decode-and-evaluate -1 \
@@ -95,6 +97,10 @@ if [ ! -f $state_file ]; then
                 --pop $population \
                 --n-pop $n_population \
                 --n-gen $n_generation \
-                --model-path $model_path
+                --model-path $model_path \
+                --autotunedir $autotunedir \
+                --n-obj $n_object \
+                --trg-bleu ${generation_path}bleu.scr \
+                --trg-time ${generation_path}time.scr
     fi
 fi

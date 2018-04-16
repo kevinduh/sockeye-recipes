@@ -23,7 +23,9 @@ pip install cma
 
 - Configure Sockeye NMT training parameters.
 
-- Configure auto-tuning settings: initial values and mapping functions(hyperparameters need to be mapped to the same scale) for hyperparameters, generation and population numbers, saving directories, etc..
+- Configure auto-tuning settings: initial values, generation and population numbers, saving directories, etc..
+
+- Configure number of optimization objectives.
 
 ``parallel.py``: If you plan to use GPUs to train your NMT models, you need to also configure the command for submiiting gpu tasks.
 
@@ -53,7 +55,11 @@ During training, some files will be generated.
 
 ``generation_00/genes/``: This folder contains hyperparameter settings(genes) for each model trained in the first generation.
 
-``generation_00/genes.src``: Records the score of each model in the first generation. The default measurment is BLEU.
+``generation_00/genes.src``: Records the score of each model in the first generation. The default measurement for single objective optimization is BLEU. For multiple objective optimization, it is pareto level for each model.
+
+``generation_00/bleu.scr``: Records the BLEU score for each model in the first generation when choosing multiobjective optimization.
+
+``generation_00/time.scr``: Records the validation time for each model in the first generation when choosing multiobjective optimization.
 
 ``generation_00/model_00/``: Information of the first model of the first generation.
 
