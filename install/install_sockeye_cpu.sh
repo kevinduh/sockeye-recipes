@@ -12,12 +12,13 @@ cd $rootdir
 git submodule init
 git submodule update --recursive --remote sockeye
 cd sockeye
-git checkout 762ce78e4e49b9ba5d14eb0a48d97f19c8807707 # version 1.16.2
+git checkout cce1acc825f5dfbcd5330756d6abe738b973b3f8 # version 1.18.1
 pip install -r requirements.txt
-python setup.py install
+pip install .
 
 # 3. install optional dependencies
-pip install tensorboard==1.0.0a6
+pip install mxboard
+pip install tensorboard tensorflow
 pip install matplotlib
 
 

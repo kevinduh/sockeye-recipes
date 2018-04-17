@@ -51,7 +51,6 @@ python -m sockeye.train -s ${train_bpe}.$src \
                         --max-num-epochs $max_num_epochs \
                         --embed-dropout $embed_dropout \
                         --keep-last-params $keep_last_params \
-                        --use-tensorboard \
                         --disable-device-locking \
                         $device \
                         -o $modeldir
