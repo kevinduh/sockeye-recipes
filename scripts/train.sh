@@ -52,6 +52,8 @@ python -m sockeye.train -s ${train_bpe}.$src \
                         --embed-dropout $embed_dropout \
                         --keep-last-params $keep_last_params \
                         --disable-device-locking \
+                        --decode-and-evaluate $decode_and_evaluate \
+                        --decode-and-evaluate-use-cpu \
                         $device \
                         -o $modeldir
 
