@@ -51,6 +51,8 @@ python -m sockeye.train -s ${train_bpe}.$src \
                         --max-num-epochs $max_num_epochs \
                         --max-updates $max_updates \
                         --embed-dropout $embed_dropout \
+                        --rnn-dropout-inputs $rnn_dropout_inputs \
+                        --rnn-dropout-states $rnn_dropout_states \
                         --keep-last-params $keep_last_params \
                         --disable-device-locking \
                         --decode-and-evaluate $decode_and_evaluate \
