@@ -49,6 +49,7 @@ python -m sockeye.train -s ${train_bpe}.$src \
                         --batch-size $batch_size \
                         --min-num-epochs $min_num_epochs \
                         --max-num-epochs $max_num_epochs \
+                        --max-updates $max_updates \
                         --embed-dropout $embed_dropout \
                         --keep-last-params $keep_last_params \
                         --disable-device-locking \

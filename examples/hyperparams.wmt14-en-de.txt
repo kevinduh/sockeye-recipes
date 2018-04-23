@@ -95,5 +95,6 @@ embed_dropout=".0:.0"
 checkpoint_frequency=10000
 min_num_epochs=0
 max_num_epochs=2
+max_updates=10000000
 keep_last_params=5
 decode_and_evaluate=256
