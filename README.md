@@ -170,6 +170,10 @@ bash wmt14-en-de.sh
 
 The downloading/preprocessing part may take up to 2 hours, and training may take up to 20 hours (on a GTX 1080 Ti GPU) for this particular hyperparameter configuration. The BLEU score on newstest2014.de after decoding should be around 19.33.
 
+## More Examples (egs)
+
+A good place to get started with various recipes is the `egs` subdirectory. For example, see [egs/ted/README.md] for instructions on building MT systems for the TED Talks data. 
+
 ## Auto-Tuning ##
 
 This package also provides tools for auto-tuning, where one can specify the hyperparameters to search over and a meta-optimizer automatically attempts to try different configurations that it believes will be promising. For more information, see the auto-tuning folder. 
