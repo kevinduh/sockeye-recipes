@@ -63,14 +63,16 @@ bpe_symbols_trg=30000
 
 ### Filename for BPE-processed bitext file ###
 # Note: the following default names should be fine for most use cases
-train_bpe=$datadir/train.bpe-${bpe_symbols_src}
-valid_bpe=$datadir/valid.bpe-${bpe_symbols_src}
+train_bpe_src=$datadir/train.bpe-${bpe_symbols_src}.$src
+valid_bpe_src=$datadir/valid.bpe-${bpe_symbols_src}.$src
+train_bpe_trg=$datadir/train.bpe-${bpe_symbols_trg}.$trg
+valid_bpe_trg=$datadir/valid.bpe-${bpe_symbols_trg}.$trg
 
 ### Filename for BPE vocabulary ###
 # Note: the following default names should be fine for most use cases
 # Note: bpe_vocab_src will be needed for applying BPE to test, in translate.sh
-bpe_vocab_src=${train_bpe}.$src.bpe_vocab
-bpe_vocab_trg=${train_bpe}.$trg.bpe_vocab
+bpe_vocab_src=${train_bpe_src}.bpe_vocab
+bpe_vocab_trg=${train_bpe_trg}.bpe_vocab
 
 
 #####################################################################

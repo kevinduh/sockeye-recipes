@@ -33,10 +33,10 @@ echo "$0 $@" >> $modeldir/cmdline.log
 
 ###########################################
 # (2) train the model (this may take a while) 
-python -m sockeye.train -s ${train_bpe}.$src \
-                        -t ${train_bpe}.$trg \
-                        -vs ${valid_bpe}.$src \
-                        -vt ${valid_bpe}.$trg \
+python -m sockeye.train -s $train_bpe_src \
+                        -t $train_bpe_trg \
+                        -vs $valid_bpe_src \
+                        -vt $valid_bpe_trg \
                         --num-embed $num_embed \
                         --rnn-num-hidden $rnn_num_hidden \
                         --rnn-attention-type $rnn_attention_type \
