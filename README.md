@@ -172,7 +172,7 @@ The downloading/preprocessing part may take up to 2 hours, and training may take
 
 ## More Examples (egs)
 
-A good place to get started with various recipes is the `egs` subdirectory. For example, see [egs/ted/README.md] for instructions on building MT systems for the TED Talks data. 
+A good place to get started with various recipes is the `egs` subdirectory. For example, see [egs/ted/README.md](egs/ted/README.md) for instructions on building MT systems for the TED Talks data. 
 
 ## Auto-Tuning ##
 

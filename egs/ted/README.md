@@ -1,7 +1,7 @@
 ## Multitarget TED Talks 
 
 This recipe builds systems from the TED Talks corpus at:
-http://www.cs.jhu.edu/~kevinduh/a/multitarget-tedtalks/
+http://www.cs.jhu.edu/~kevinduh/a/multitarget-tedtalks/ .
 There are many languages available (~20). 
 
 ### 1. Setup
@@ -19,9 +19,10 @@ and populates it with several hyperparameter files
 ```bash
 sh ./1_setup_task.sh zh
 cd zh-en
+ls
 ```
 
-Do a `ls`. You should see files like `model1.hpm` which is one of the hyperparameter files we will run with. This file specifies a BPE symbol size of 30k for source and target, 500-dim word embeddings, 200-dim LSTM hiddent units in a 1-layer seq2seq network. Further, the checkpoint frequency is 5000 updates and all model information will be saved in ./model1.
+You should see files like `model1.hpm` which is one of the hyperparameter files we will run with. This file specifies a BPE symbol size of 30k for source and target, 500-dim word embeddings, 200-dim LSTM hiddent units in a 1-layer seq2seq network. Further, the checkpoint frequency is 5000 updates and all model information will be saved in ./model1.
 
 ### 2. Preprocessing and Training
 
@@ -41,7 +42,7 @@ Now, we can preprocess the tokenized training and dev data using BPE.
 
 The resulting BPE vocabulary file (for English) is: `data-bpe/train.bpe-30000.en.bpe_vocab` and the segmented training file is: `data-bpe/train.bpe-30000.en`. For Chinese, replace `en` by `zh`. These are the files we train on. 
 
-To train, we will use qsub and gpu:
+To train, we will use qsub and gpu (On a GeForce GTX 1080 Ti, this should take about 4 hours):
 
 ```bash
 qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=12:00:00 -j y ../../../scripts/train.sh model1.hpm gpu
@@ -61,13 +62,13 @@ Again, make sure we are in the correct working directory (`$rootdir/egs/ted/zh-e
 pwd
 ```
 
-We translate the test set via qsub on gpu:
+The test set we want to translate is `../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh`. We translate it using model1 via qsub on gpu (this should take 10 minutes or less):
 
 ```bash
 qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh model1.hpm ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh model1/ted_test1_en-zh.tok.zh.1best gpu
 ```
 
-Alternatively, translate using local cpu:
+Alternatively, to translate using local cpu:
 
 ```bash
 ../../../scripts/translate.sh model1.hpm ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh model1/ted_test1_en-zh.tok.zh.1best cpu
@@ -85,7 +86,7 @@ This should give a BLEU score of around 10.58.
 ### 4. Train systems for different language pairs
 
 Let's repeat the above steps (1-3) on Arabic (ar).
-Let's setup the task in the directory (`$rootdir/egs/ted/`)
+First return to the parent directory (`$rootdir/egs/ted/`) and setup the task.
 
 ```bash
 cd ../ 
@@ -111,3 +112,13 @@ The BLEU score should be around 20.52.
 
 For different source languages, just replace `ar` with the language code, e.g. `de`. 
 
+The test set BLEU scores of various tasks are:
+
+| Task  | Model1 |
+| ----- | ------ |
+| ar-en | 20.52  |
+| de-en | 25.65  |
+| fa-en | 14.62  |
+| ko-en | 8.45   |
+| ru-en | 16.18  |
+| zh-en | 10.58  |
