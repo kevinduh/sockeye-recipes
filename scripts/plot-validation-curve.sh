@@ -39,10 +39,10 @@ for c in `seq 1 $step 9999`; do
     output=$modeldir/out.valid_bpe.$checkpoint
     if [ ! -f $output ]; then
 	echo `date` "Translating with model $checkpoint"
-	python -m sockeye.translate --models $modeldir --checkpoints $checkpoint $device < $valid_bpe.$src > $output
+	python -m sockeye.translate --disable-device-locking --max-input-len 100 --models $modeldir --checkpoints $checkpoint $device < $valid_bpe_src > $output
     fi
-    
+
     # compute bleu (note this is multi-bleu on bpe so may not be comparable in all tokenization settings; this is mainly for evaluating the learning curve)
     echo -n "$checkpoint " >> $resultlog
-    $multibleu $valid_bpe.$trg < $output >> $resultlog
+    $multibleu $valid_bpe_trg < $output >> $resultlog
 done
