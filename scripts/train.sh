@@ -57,6 +57,9 @@ python -m sockeye.train -s $train_bpe_src \
                         --disable-device-locking \
                         --decode-and-evaluate $decode_and_evaluate \
                         --decode-and-evaluate-use-cpu \
+                        --encoder rnn \
+                        --decoder rnn \
+                        --batch-type sentence \
                         $device \
                         -o $modeldir
 
