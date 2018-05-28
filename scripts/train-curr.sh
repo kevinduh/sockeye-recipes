@@ -30,7 +30,7 @@ echo "$0 $@" >> $modeldir/cmdline.log
 # (2.1) prepare the data
 python -m sockeye.prepare_data -s $train_bpe_src \
                                -t $train_bpe_trg \
-                               --min-num-shards 5 \
+                               --sentence-score-file $score_file \
                                --o $modeldir/prepared_data
 
 # (2.2) train the model (this may take a while) 
@@ -63,6 +63,7 @@ python -m sockeye.train -d $modeldir/prepared_data \
                         --decoder rnn \
                         --batch-type sentence \
                         --curriculum-training \
+                        --curriculum-update-freq $curriculum_update_freq \
                         $device \
                         -o $modeldir
 
