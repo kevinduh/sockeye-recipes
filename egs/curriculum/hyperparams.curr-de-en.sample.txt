@@ -31,10 +31,10 @@
 #####################################################################
 
 ### User-specified directories ###
-workdir=/exp/gkumar/exp/sockeye_trial/
+workdir=./
 datadir=$workdir/data
-modeldir=$workdir/model_curr1
-rootdir=/exp/gkumar/code/sockeye-recipe-mtma/
+modeldir=$workdir/model-curr
+rootdir=../../
 
 ### Language pair (source and target) ###
 # Note: We assume all bitext files contain these as suffices. 
