@@ -65,19 +65,19 @@ pwd
 The test set we want to translate is `../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh`. We translate it using model1 via qsub on gpu (this should take 10 minutes or less):
 
 ```bash
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh model1.hpm ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh model1/ted_test1_en-zh.tok.zh.1best gpu
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh model1.hpm ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh model1/ted_test1_en-zh.tok.en.1best gpu
 ```
 
 Alternatively, to translate using local cpu:
 
 ```bash
-../../../scripts/translate.sh model1.hpm ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh model1/ted_test1_en-zh.tok.zh.1best cpu
+../../../scripts/translate.sh model1.hpm ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh model1/ted_test1_en-zh.tok.en.1best cpu
 ```
 
-When this is finished, we have the translations in `model1/ted_test1_en-zh.tok.zh.1best`. We can now compute the BLEU score by:
+When this is finished, we have the translations in `model1/ted_test1_en-zh.tok.en.1best`. We can now compute the BLEU score by:
 
 ```bash
-../../../tools/multi-bleu.perl ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.en < model1/ted_test1_en-zh.tok.zh.1best
+../../../tools/multi-bleu.perl ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.en < model1/ted_test1_en-zh.tok.en.1best
 ```
 
 This should give a BLEU score of around 10.58.
@@ -104,7 +104,7 @@ qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=12:00:00 -j y ../../../scripts/
 Finally, we translated and measure BLEU:
 
 ```bash
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh model1.hpm ../multitarget-ted/en-ar/tok/ted_test1_en-ar.tok.ar model1/ted_test1_en-ar.tok.ar.1best gpu
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh model1.hpm ../multitarget-ted/en-ar/tok/ted_test1_en-ar.tok.ar model1/ted_test1_en-ar.tok.en.1best gpu
 ../../../tools/multi-bleu.perl ../multitarget-ted/en-ar/tok/ted_test1_en-ar.tok.en < model1/ted_test1_en-ar.tok.en.1best
 ```
 
