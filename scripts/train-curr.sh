@@ -3,7 +3,7 @@
 # Train a Neural Machine Translation model using Sockeye
 
 if [ $# -ne 2 ]; then
-    echo "Usage: train.sh hyperparams.txt device(gpu/cpu)"
+    echo "Usage: train_curr.sh hyperparams.txt env"
     exit
 fi
 
@@ -11,17 +11,12 @@ fi
 # (0) Hyperparameter settings
 # source hyperparams.txt to get text files and all training hyperparameters
 source $1
+venv=$2
 
-# options for cpu vs gpu training (may need to modify for different grids)
-if [ $2 == "cpu" ]; then
-    source activate sockeye_cpu
-    device="--use-cpu"
-else
-    source activate sockeye_gpu
-    module load cuda80/toolkit
-    gpu_id=`$rootdir/scripts/get-gpu.sh`
-    device="--device-id $gpu_id"
-fi
+source activate $venv
+module load cuda80/toolkit
+gpu_id=`$rootdir/scripts/get-gpu.sh`
+device="--device-id $gpu_id"
 
 ###########################################
 # (1) Book-keeping
@@ -32,9 +27,16 @@ echo "Start training: $datenow on $(hostname)" >> $modeldir/cmdline.log
 echo "$0 $@" >> $modeldir/cmdline.log
 
 ###########################################
-# (2) train the model (this may take a while) 
-python -m sockeye.train -s $train_bpe_src \
-                        -t $train_bpe_trg \
+# (2.1) prepare the data
+python -m sockeye.prepare_data -s $train_bpe_src \
+                               -t $train_bpe_trg \
+                               --sentence-score-file $score_file \
+                               --o $modeldir/prepared_data
+
+# (2.2) train the model (this may take a while) 
+#python -m sockeye.train -s $train_bpe_src \
+                        #-t $train_bpe_trg \
+python -m sockeye.train -d $modeldir/prepared_data \
                         -vs $valid_bpe_src \
                         -vt $valid_bpe_trg \
                         --num-embed $num_embed \
@@ -60,6 +62,8 @@ python -m sockeye.train -s $train_bpe_src \
                         --encoder rnn \
                         --decoder rnn \
                         --batch-type sentence \
+                        --curriculum-training \
+                        --curriculum-update-freq $curriculum_update_freq \
                         $device \
                         -o $modeldir
 
