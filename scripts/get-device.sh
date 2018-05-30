@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 DESIRED_DEVICE=$1
 if [[ -z $DESIRED_DEVICE ]]; then
   # Assume that a conda env is enabled;
