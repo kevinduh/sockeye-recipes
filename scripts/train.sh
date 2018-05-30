@@ -2,18 +2,53 @@
 #
 # Train a Neural Machine Translation model using Sockeye
 
-if [ $# -ne 2 ]; then
-    echo "Usage: train.sh hyperparams.txt device(gpu/cpu)"
-    exit
+function errcho() {
+  >&2 echo $1
+}
+
+function show_help() {
+  errcho "Usage: train.sh -p hyperparams.txt -e ENV_NAME [-d DEVICE]"
+  errcho "Device is optional and inferred from env"
+  errcho ""
+}
+
+function check_file_exists() {
+  if [ ! -f $1 ]; then
+    errcho "FATAL: Could not find file $1"
+    exit 1
+  fi
+}
+
+while getopts ":h?p:e:d:" opt; do
+  case "$opt" in
+    h|\?)
+      show_help
+      exit 0
+      ;;
+    p) HYP_FILE=$OPTARG
+      ;;
+    e) ENV_NAME=$OPTARG
+      ;;
+    d) DEVICE=$OPTARG
+      ;;
+  esac
+done
+
+if [[ -z $HYP_FILE || -z $ENV_NAME ]]; then
+  errcho "Missing arguments"
+  show_help
+  exit 1
 fi
 
 ###########################################
 # (0) Hyperparameter settings
 # source hyperparams.txt to get text files and all training hyperparameters
-source $1
+check_file_exists $HYP_FILE
+source $HYP_FILE
+source activate $ENV_NAME
 
 # options for cpu vs gpu training (may need to modify for different grids)
-device_output=`$rootdir/scripts/get-device.sh`
+device_output=`$rootdir/scripts/get-device.sh $DEVICE`
 device=`echo $device_output | head -n1`
 device_log=`echo $device_output | tail -n1`
 
@@ -25,7 +60,6 @@ datenow=`date '+%Y-%m-%d %H:%M:%S'`
 echo "Start training: $datenow on $(hostname)" >> $modeldir/cmdline.log
 echo "$0 $@" >> $modeldir/cmdline.log
 echo $device_log >> $modeldir/cmdline.log
-
 
 ###########################################
 # (2) train the model (this may take a while) 
