@@ -13,15 +13,9 @@ fi
 source $1
 
 # options for cpu vs gpu training (may need to modify for different grids)
-if [ $2 == "cpu" ]; then
-    source activate sockeye_cpu
-    device="--use-cpu"
-else
-    source activate sockeye_gpu
-    module load cuda80/toolkit
-    gpu_id=`$rootdir/scripts/get-gpu.sh`
-    device="--device-id $gpu_id"
-fi
+device_output=`$rootdir/scripts/get-device.sh`
+device=`echo $device_output | head -n1`
+device_log=`echo $device_output | tail -n1`
 
 ###########################################
 # (1) Book-keeping
@@ -30,6 +24,8 @@ cp $1 $modeldir/hyperparams.txt
 datenow=`date '+%Y-%m-%d %H:%M:%S'`
 echo "Start training: $datenow on $(hostname)" >> $modeldir/cmdline.log
 echo "$0 $@" >> $modeldir/cmdline.log
+echo $device_log >> $modeldir/cmdline.log
+
 
 ###########################################
 # (2) train the model (this may take a while) 
