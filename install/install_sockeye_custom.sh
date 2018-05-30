@@ -1,5 +1,6 @@
 #!/bin/bash
 # Install a custom version of sockeye in a conda environment
+# CUDA 9.0
 
 set -e
 
@@ -11,7 +12,7 @@ function errcho() {
 
 function show_help() {
   errcho "Install environment for custom sockeye"
-  errcho "usage: install_sockeye_custom.sh [-h] -s SOCKEYE_LOCATION -e ENV_NAME [-f]"
+  errcho "usage: install_sockeye_custom.sh [-h] -s SOCKEYE_LOCATION -e ENV_NAME [-f] [-d DEVICE_NAME]"
   errcho ""
 }
 
@@ -22,9 +23,10 @@ function check_dir_exists() {
   fi
 }
 
+DEVICE=gpu
 FORCE_NEW_ENV=false
 
-while getopts ":h?s:e:f" opt; do
+while getopts ":h?s:e:fd:" opt; do
   case "$opt" in
     h|\?)
       show_help
@@ -35,6 +37,8 @@ while getopts ":h?s:e:f" opt; do
     e) ENV_NAME=$OPTARG
       ;;
     f) FORCE_NEW_ENV=true
+      ;;
+    d) DEVICE=$OPTARG
       ;;
   esac
 done
@@ -72,9 +76,15 @@ export PYTHONNOUSERSITE=1
 
 # 2. clone sockeye NMT as submodule and install
 cd $SOCKEYE
-pip install -r requirements.gpu-cu80.txt
+if [[ "$DEVICE" == "gpu" ]]; then
+  pip install -r requirements.gpu-cu90.txt
+elif [[ "$DEVICE" == "cpu" ]]; then
+  pip install -r requirements.txt
+else
+  errcho "Invalid device name; must be one of cpu or gpu"
+  exit 1
+fi
 pip install . --no-deps
-#pip install . --no-deps -r requirements.gpu-cu80.txt
 
 # 3. install optional dependencies
 pip install mxboard
