@@ -46,11 +46,9 @@ fi
 check_file_exists $HYP_FILE
 source $HYP_FILE
 source activate $ENV_NAME
-ml cuda90/toolkit
+
 # options for cpu vs gpu training (may need to modify for different grids)
-device_output=`$rootdir/scripts/get-device.sh $DEVICE`
-device=`echo "$device_output" | head -n1`
-device_log=`echo "$device_output" | tail -n1`
+source $rootdir/scripts/get-device.sh $DEVICE ""
 
 ###########################################
 # (1) Book-keeping
@@ -60,7 +58,6 @@ datenow=`date '+%Y-%m-%d %H:%M:%S'`
 echo "Start training: $datenow on $(hostname)" >> $modeldir/cmdline.log
 echo "$0 $@" >> $modeldir/cmdline.log
 echo $device_log >> $modeldir/cmdline.log
-
 
 ###########################################
 # (2) train the model (this may take a while) 
