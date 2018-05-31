@@ -41,7 +41,7 @@ if [[ -z $HYP_FILE || -z $ENV_NAME ]]; then
 fi
 
 ###########################################
-# (0) Hyperparameter settings
+# (0) Setup
 # source hyperparams.txt to get text files and all training hyperparameters
 check_file_exists $HYP_FILE
 source $HYP_FILE
@@ -57,10 +57,10 @@ cp $HYP_FILE $modeldir/hyperparams.txt
 datenow=`date '+%Y-%m-%d %H:%M:%S'`
 echo "Start training: $datenow on $(hostname)" >> $modeldir/cmdline.log
 echo "$0 $@" >> $modeldir/cmdline.log
-echo $device_log >> $modeldir/cmdline.log
+echo "$devicelog" >> $modeldir/cmdline.log
 
 ###########################################
-# (2) train the model (this may take a while) 
+# (2) Train the model (this may take a while) 
 python -m sockeye.train -s $train_bpe_src \
                         -t $train_bpe_trg \
                         -vs $valid_bpe_src \
