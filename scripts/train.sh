@@ -65,29 +65,41 @@ python -m sockeye.train -s $train_bpe_src \
                         -t $train_bpe_trg \
                         -vs $valid_bpe_src \
                         -vt $valid_bpe_trg \
+                        --encoder rnn \
+                        --decoder rnn \
                         --num-embed $num_embed \
+                        --num-layers $num_layers \
                         --rnn-num-hidden $rnn_num_hidden \
                         --rnn-attention-type $rnn_attention_type \
+                        --rnn-cell-type $rnn_cell_type \
+                        --rnn-dropout-inputs $rnn_dropout_inputs \
+                        --rnn-dropout-states $rnn_dropout_states \
+                        --embed-dropout $embed_dropout \
                         --max-seq-len $max_seq_len \
-                        --checkpoint-frequency $checkpoint_frequency \
                         --num-words $num_words \
                         --word-min-count $word_min_count \
-                        --num-layers $num_layers \
-                        --rnn-cell-type $rnn_cell_type \
+                        --checkpoint-frequency $checkpoint_frequency \
                         --batch-size $batch_size \
                         --min-num-epochs $min_num_epochs \
                         --max-num-epochs $max_num_epochs \
                         --max-updates $max_updates \
-                        --embed-dropout $embed_dropout \
-                        --rnn-dropout-inputs $rnn_dropout_inputs \
-                        --rnn-dropout-states $rnn_dropout_states \
                         --keep-last-params $keep_last_params \
                         --disable-device-locking \
                         --decode-and-evaluate $decode_and_evaluate \
                         --decode-and-evaluate-use-cpu \
-                        --encoder rnn \
-                        --decoder rnn \
+                        --initial-learning-rate 0.0002 \
+                        --label-smoothing 0.1 \
                         --batch-type sentence \
+                        --optimizer adam \
+                        --gradient-clipping-threshold 1.0 \
+                        --gradient-clipping-type abs \
+                        --learning-rate-reduce-factor 0.7 \
+                        --learning-rate-reduce-num-not-improved 8 \
+                        --learning-rate-scheduler-type plateau-reduce \
+                        --learning-rate-decay-optimizer-states-reset best \
+                        --learning-rate-decay-param-reset \
+                        --loss cross-entropy \
+                        --seed 13 \
                         $device \
                         -o $modeldir
 
