@@ -42,7 +42,7 @@ bash ./install/install_sockeye_gpu.sh
 ```
 
 #### Environment Setup
-To set up the running environment, we add the following configurations in the ~/.bashrc file.
+Depending on your computer setup, you may want add the following configurations in the ~/.bashrc file.
 
 Configure CUDA and CuDNN for the GPU version of Sockeye:
 
@@ -56,107 +56,16 @@ Set up a clean UTF-8 environment to avoid encoding errors:
 export LANG=en_US.UTF-8
 ```
 
+## Recipes 
 
-## Quick Example Run
-We will train a model on a very small sample German-English data, just to confirm our installation works. The whole process should take less than 30 minutes. Since the data is so small, you should not expect the model to learn anything. 
+The `egs` subdirectory contains recipes for various datasets. 
 
-(1) Download and unpack the data in any directory. Let's make our working directory "sockeye_trial" in this example:
-```bash
-mkdir ~/sockeye_trial
-cd ~/sockeye_trial
-wget https://cs.jhu.edu/~kevinduh/j/sample-de-en.tgz
-tar -xzvf sample-de-en.tgz
-```
+* [egs/quickstart](egs/quickstart): For first time users, this recipe explains how sockeye-recipe works. 
 
-(2) Edit the hyperparams.txt file. We can use the example in examples/hyperparams.sample-de-en.txt. First, copy it to your current working directory:
+* [egs/ted](egs/ted): Recipes for training various NMT models, using a TED Talks dataset consisting of 20 different languages. 
 
-```bash
-cd ~/sockeye_trial
-cp path/to/sockeye-recipes/examples/hyperparams.sample-de-en.txt .
-```
+* [egs/wmt14-en-de](egs/wmt14-en-de): Recipe for training a baseline that compares with the <a href="https://nlp.stanford.edu/pubs/emnlp15_attn.pdf">Luong EMNLP2015 paper</a>.
 
-Then, please open up an editor and edit the "rootdir" setting in hyperparams.sample-de-en.txt
-to point to your sockeye-recipes installation path, e.g. ~/src/sockeye-recipes
-Note that this hyperparms file specifies all of your file/script locations and model training configurations, and is the recipe for every experiment. 
-The other settings in the example can be used as is, but if your paths have changed, make sure to modify workdir, datadir, modeldir accordingly. See the file for detailed explanation.
-
-(3) Preprocess data with BPE segmentation. 
-
-```bash
-bash path/to/sockeye-recipes/scripts/preprocess-bpe.sh hyperparams.sample-de-en.txt
-```
-
-This is a standard way (though not the only way) to handle large vocabulary in NMT. Currently sockeye-recipes assumes BPE segmentation before training. The preprocess-bpe.sh script takes a hyperparams file as input and preprocesses accordingly. To get a flavor of BPE segmentation results (train.en is original, train.bpe-4000.en is BPE'ed, and the string '@@' indicates BPE boundary): 
-
-```bash
-head -3 sample-de-en/train.en data/train.bpe-4000.en
-```
-
-(4) Now, we can train the NMT model. We give the train.sh script the hyperparameters and tell it whether to train on CPU or GPU.
-
-First, let's try the CPU version:
-```bash
-bash path/to/sockeye-recipes/scripts/train.sh hyperparams.sample-de-en.txt cpu
-```
-
-The model and all training info are saved in modeldir (~/sockeye_trial/model1).
-
-Optionally, let's try GPU version. This assumes your machine has NVIDIA GPUs. First, we modify the modeldir hyper-parameter to model2, to keep the training information separate. Next we run the same train.sh script but telling it to use the gpu:
-```bash
-sed 's/model1/model2/' hyperparams.sample-de-en.txt > hyperparams.sample-de-en.2.txt
-bash path/to/sockeye-recipes/scripts/train.sh hyperparams.sample-de-en.2.txt gpu
-```
-
-The GPU version calls scripts/get-gpu.sh to find a free GPU card on the current machine. Sockeye allows multi-GPU training but in these recipes we only use one GPU per training process. 
-
-Alternatively, all these commands can also be used in conjunction with Univa Grid Engine, e.g.:
-```bash
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=24:00:00 -j y -o train.log path/to/sockeye-recipes/scripts/train.sh hyperparams.sample-de-en.2.txt gpu
-```
-
-(5) Finally, we can translate new test sets with:
-
-```bash
-bash path/to/sockeye-recipes/scripts/translate.sh hyperparams.sample-de-en.2.txt input output device(cpu/gpu)
-```
-
-This script will find the model from hyperparams file. Then it runs BPE on the input (which is assumed to be tokenized in the same way as train_tok and valid_tok), translates the result, runs de-BPE and saves in output. 
-
-
-(6) To visualize the learning curve, you can use tensorboard:
-
-```bash
-source activate sockeye_cpu
-tensorboard --logdir ~/sockeye_trial/model1
-```
-
-Then follow the instructions, e.g. pointing your browser to http://localhost:6006 . Note that not all features of Google's tensorboard is implemented in this DMLC MXNet port, but at least you can currently visualize perplexity curves and a few other things.  
-
-
-## Full Example Run (WMT14 English-German)
-
-This example trains on a full English-German dataset of 4.5 million sentence pairs, drawn from WMT14 and packaged by <a href="https://nlp.stanford.edu/projects/nmt/">Stanford</a>. The results should be comparable to the <a href="https://nlp.stanford.edu/pubs/emnlp15_attn.pdf">Luong EMNLP2015 paper</a>.
-
-We will copy over the script "wmt14-en-de.sh" and hyperparameter file "hyperparams.wmf14-en-de.txt" to your working directory "sockeye_trial2". The script downloads the data, runs BPE preprocessing and starts off a training process via qsub:
-
-```bash
-mkdir sockeye_trial2
-cp examples/wmt14-en-de.sh sockeye_trial2/
-cp examples/hyperparams.wmt14-en-de.txt sockeye_trial2/
-cd sockeye_trial2
-```
-
-Before running wmt14-en-de.sh, make sure to modify rootdir in the hyperparameters file to point to your sockeye-recipes directory. If you saved the data in a different directory, make sure to modify train_tok and valid_tok. If you are using a different workdir to keep results, modify that in the hyperparameters file too. According to the hyperparams.wmt14-en-de.txt file, note the model will be trained on train.{en,de} (train_tok) and validated on newstest2013 (valid_tok). 
-
-```bash
-bash wmt14-en-de.sh
-```
-
-The downloading/preprocessing part may take up to 2 hours, and training may take up to 20 hours (on a GTX 1080 Ti GPU) for this particular hyperparameter configuration. The BLEU score on newstest2014.de after decoding should be around 19.33.
-
-## More Examples (egs)
-
-A good place to get started with various recipes is the `egs` subdirectory. For example, see [egs/ted/README.md](egs/ted/README.md) for instructions on building MT systems for the TED Talks data. 
 
 ## Auto-Tuning ##
 
