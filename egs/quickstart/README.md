@@ -20,7 +20,7 @@ Note that `workdir=./` so everything will be placed in the current directory. Th
 
 (3) Preprocess data with BPE segmentation.
 
-Run the `preprocess-bpe.sh` script, which will read the training/validation tokenized bitext (via `train_tok` and `valid_tok`), learn the BPE subword units (the number of which is specified by `bpe_symbols_src` and `bpe_symbols_trg`) and data the results in `datadir=$workdir/data-bpe`
+Run the `preprocess-bpe.sh` script, which will read the training/validation tokenized bitext (via `train_tok` and `valid_tok`), learn the BPE subword units (the number of which is specified by `bpe_symbols_src` and `bpe_symbols_trg`) and save the BPE'd text in `datadir=$workdir/data-bpe`
 
 ```bash
 bash path/to/sockeye-recipes/scripts/preprocess-bpe.sh tiny_rnn.hpm
@@ -38,9 +38,16 @@ bash ../../scripts/preprocess-bpe.sh tiny_rnn.hpm
 
 This is a standard way (though not the only way) to handle large vocabulary in NMT. Currently sockeye-recipes assumes BPE segmentation before training. The preprocess-bpe.sh script takes a hyperparams file as input and preprocesses accordingly. To get a flavor of BPE segmentation results (train.en is original, train.bpe-4000.en is BPE'ed, and the string '@@' indicates BPE boundary):
 
+```bash
 head -3 sample-de-en/train.en data/train.bpe-4000.en
+```
 
-(4a) Now, we can train the NMT model. We give the train.sh script the hyperparameters and tell it whether to train on CPU or GPU.
+(4a) Now, we can train the NMT model. Generally, the invocation is:
+
+```bash
+bash path/to/sockeye-recipes/scripts/train -p HYPERPARAMETER_FILE -e SOCKEYE_ENVIRONMENT
+```
+The hyperparameter file specifies the model architecture and training data, while the Sockeye Conda Environment specifies the actual code and whether to run on CPU or GPU.
 
 First, let's try the CPU version:
 
