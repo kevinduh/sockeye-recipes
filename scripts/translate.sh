@@ -55,7 +55,6 @@ source $rootdir/scripts/get-device.sh $DEVICE ""
 ###########################################
 # (1) Book-keeping
 LOG_FILE=${OUTPUT_FILE}.log
-cp $HYP_FILE $modeldir/hyperparams.txt
 datenow=`date '+%Y-%m-%d %H:%M:%S'`
 echo "Start translating: $datenow on $(hostname)" > $LOG_FILE
 echo "$0 $@" >> $LOG_FILE
