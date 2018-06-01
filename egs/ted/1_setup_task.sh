@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # The Multitarget TED talks dataset has many languages
 # This script sets things up for a particular language-pair
@@ -15,14 +15,15 @@ trg=en
 
 rootdir="$(readlink -f "$(dirname "$0")/../../")"
 train_tok="$rootdir/egs/ted/multitarget-ted/en-${src}/tok/ted_train_en-${src}.tok.clean"
-valid_tok="$rootdir/egs/ted/multitarget-ted/en-${src}/tok/ted_dev_en-${src}.tok.clean"
+valid_tok="$rootdir/egs/ted/multitarget-ted/en-${src}/tok/ted_dev_en-${src}.tok"
 workdir="./"
 
+mkdir -p ${src}-${trg}
 
 for model in rs1 ; do
     sed "s#__SRC__#${src}#g; s#__TRG__#${trg}#g;" $rootdir/hpm/$model.hpm-template \
 	| sed "s#__WORKDIR__#${workdir}#g; " \
 	| sed "s#__ROOTDIR__#${rootdir}#g; " \
 	| sed "s#__TRAIN_TOK__#${train_tok}#g; " \
-	| sed "s#__VALID_TOK__#${valid_tok}#g; " > ${src}-en/$model.hpm
+	| sed "s#__VALID_TOK__#${valid_tok}#g; " > ${src}-${trg}/$model.hpm
 done
