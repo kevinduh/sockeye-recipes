@@ -1,5 +1,5 @@
 #####################################################################
-# Hyperparameters for preprocess-bpe.sh and train.sh                #
+# Sockeye-recipes Hyperparameter configuration file                 #
 #                                                                   #
 # Overview:                                                         #
 # - "workdir" corresponds a group of preprocessed bitext and models #
@@ -23,6 +23,10 @@
 # - output: "modeldir", which contains all training info and can    #
 #    be used to translate                                           #
 # - main hyperparameters: many! see below                           #
+#                                                                   #
+# translate.sh:                                                     #
+# - input: this hyperparam file, which specifies modeldir           #
+# - output: resulting target translation of source file             #
 #####################################################################
 
 
@@ -32,9 +36,9 @@
 
 ### User-specified directories ###
 workdir=./
-datadir=$workdir/data
-modeldir=$workdir/model-curr
+modeldir=$workdir/tiny_rnn
 rootdir=../../
+# DESCRIPTION: tiny model for demo purposes
 
 ### Language pair (source and target) ###
 # Note: We assume all bitext files contain these as suffices. 
@@ -46,9 +50,8 @@ trg=en
 # Note we assume tokenization is already done, and will only run BPE
 # For tokenization and other preprocessing, see preprocess-tokenize.sh
 # which does not use this hyperparam.txt file
-train_tok=$workdir/sample-de-en/train
-valid_tok=$workdir/sample-de-en/valid
-
+train_tok=./sample-de-en/train
+valid_tok=./sample-de-en/valid
 
 
 #####################################################################
@@ -63,6 +66,7 @@ bpe_symbols_trg=4000
 
 ### Filename for BPE-processed bitext file ###
 # Note: the following default names should be fine for most use cases
+datadir=$workdir/data-bpe/
 train_bpe_src=$datadir/train.bpe-${bpe_symbols_src}.$src
 valid_bpe_src=$datadir/valid.bpe-${bpe_symbols_src}.$src
 train_bpe_trg=$datadir/train.bpe-${bpe_symbols_trg}.$trg
@@ -80,29 +84,36 @@ bpe_vocab_trg=${train_bpe_trg}.bpe_vocab
 #####################################################################
 
 # Model architecture
-num_embed="50:50"
-rnn_num_hidden=50
+num_embed="64:64"
+rnn_num_hidden=64
 rnn_attention_type="dot"
 num_layers=1
 rnn_cell_type="lstm"
 
-# Training configuration
-max_seq_len="100:100"
-num_words="${bpe_symbols_src}:${bpe_symbols_trg}"
-word_min_count="1:1"
-batch_size=64
+# Regularization
 embed_dropout=".0:.0"
 rnn_dropout_inputs=".0:.0"
 rnn_dropout_states=".0:.0"
+label_smoothing=0.0
+
+# Vocabulary
+num_words="${bpe_symbols_src}:${bpe_symbols_trg}"
+word_min_count="1:1"
+max_seq_len="100:100"
+
+# Training configuration
+batch_size=4096
+optimizer=adam
+initial_learning_rate=0.0002
+learning_rate_reduce_factor=0.7
+loss="cross-entropy"
+seed=13
 
 # Logging and stopping condition
-checkpoint_frequency=100
-min_num_epochs=50
-max_num_epochs=100
-max_updates=1000000
-keep_last_params=5
+checkpoint_frequency=20
+min_num_epochs=0
+max_num_epochs=2
+max_updates=5000
+keep_last_params=-1
 decode_and_evaluate=0
 
-# For curriculum learning
-score_file=${workdir}/curriculum_sent.scores
-curriculum_update_freq=20
