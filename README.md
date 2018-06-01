@@ -1,7 +1,8 @@
 # sockeye-recipes
+
 Training scripts and recipes for the Sockeye Neural Machine Translation (NMT) toolkit
 - The original Sockeye codebase is at [AWS Labs](https://github.com/awslabs/sockeye)
-- This version is based off [a stable fork](https://github.com/kevinduh/sockeye). The current sockeye version that sockeye-recipes is built on is: 1.18.1. 
+- This version is based off [a stable fork](https://github.com/kevinduh/sockeye). The current sockeye version that sockeye-recipes is built on is: 1.18.15. 
 
 This package contains scripts that makes it easy to run NMT experiments.
 The way to use this package is to specify settings in a file like "hyperparams.txt", 
@@ -28,6 +29,7 @@ bash ./install/install_tools.sh
 ```
 
 The training scripts and recipes will activate either the sockeye_cpu or sockeye_gpu environment depending on whether CPU or GPU is specified. 
+Currently we assume CUDA 9.0 is available for GPU mode; this can be changed if needed. 
 The third install_tools.sh script simply installs some helper tools, such as BPE preprocesser.
 
 #### Re-Install
@@ -65,6 +67,10 @@ The `egs` subdirectory contains recipes for various datasets.
 * [egs/ted](egs/ted): Recipes for training various NMT models, using a TED Talks dataset consisting of 20 different languages. 
 
 * [egs/wmt14-en-de](egs/wmt14-en-de): Recipe for training a baseline that compares with the <a href="https://nlp.stanford.edu/pubs/emnlp15_attn.pdf">Luong EMNLP2015 paper</a>.
+
+* [egs/curriculum](egs/curriculum): Recipe for curriculum learning. Also explains how to use sockeye-recipes in conjunction with a custom sockeye installation.
+
+The [hpm](hpm) subdirectory contains hyperparameter (hpm) file templates. 
 
 
 ## Auto-Tuning ##

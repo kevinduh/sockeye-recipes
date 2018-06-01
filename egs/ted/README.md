@@ -2,7 +2,7 @@
 
 This recipe builds systems from the TED Talks corpus at:
 http://www.cs.jhu.edu/~kevinduh/a/multitarget-tedtalks/ .
-There are many languages available (~20). 
+There are many languages available (~20), so we can try many different language-pairs. 
 
 ### 1. Setup
 
@@ -22,7 +22,7 @@ cd zh-en
 ls
 ```
 
-You should see files like `model1.hpm` which is one of the hyperparameter files we will run with. This file specifies a BPE symbol size of 30k for source and target, 500-dim word embeddings, 200-dim LSTM hiddent units in a 1-layer seq2seq network. Further, the checkpoint frequency is 5000 updates and all model information will be saved in ./model1.
+You should see files like `rs1.hpm` which is one of the hyperparameter files we will run with. This file specifies a BPE symbol size of 30k for source and target, 512-dim word embeddings, 512-dim LSTM hiddent units in a 1-layer seq2seq network. Further, the checkpoint frequency is 4000 updates and all model information will be saved in ./rs1.
 
 ### 2. Preprocessing and Training
 
@@ -37,7 +37,7 @@ All hyperparameter files and instructions below assume we are in `$rootdir/egs/t
 
 Now, we can preprocess the tokenized training and dev data using BPE.
 ```bash
-../../../scripts/preprocess-bpe.sh model1.hpm
+../../../scripts/preprocess-bpe.sh rs1.hpm
 ```
 
 The resulting BPE vocabulary file (for English) is: `data-bpe/train.bpe-30000.en.bpe_vocab` and the segmented training file is: `data-bpe/train.bpe-30000.en`. For Chinese, replace `en` by `zh`. These are the files we train on. 
@@ -45,12 +45,12 @@ The resulting BPE vocabulary file (for English) is: `data-bpe/train.bpe-30000.en
 To train, we will use qsub and gpu (On a GeForce GTX 1080 Ti, this should take about 4 hours):
 
 ```bash
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=12:00:00 -j y ../../../scripts/train.sh model1.hpm gpu
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=12:00:00,num_proc=2 -j y ../../../scripts/train.sh rs1.hpm gpu
 ```
 
 Alternatively, if using local cpu:
 ```bash
-../../../scripts/train.sh model1.hpm cpu
+../../../scripts/train.sh rs1.hpm cpu
 ```
 
 
@@ -62,22 +62,22 @@ Again, make sure we are in the correct working directory (`$rootdir/egs/ted/zh-e
 pwd
 ```
 
-The test set we want to translate is `../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh`. We translate it using model1 via qsub on gpu (this should take 10 minutes or less):
+The test set we want to translate is `../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh`. We translate it using rs1 via qsub on gpu (this should take 10 minutes or less):
 
 ```bash
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh model1.hpm ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh model1/ted_test1_en-zh.tok.en.1best gpu
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh rs1.hpm ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh rs1/ted_test1_en-zh.tok.en.1best gpu
 ```
 
 Alternatively, to translate using local cpu:
 
 ```bash
-../../../scripts/translate.sh model1.hpm ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh model1/ted_test1_en-zh.tok.en.1best cpu
+../../../scripts/translate.sh rs1.hpm ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh rs1/ted_test1_en-zh.tok.en.1best cpu
 ```
 
-When this is finished, we have the translations in `model1/ted_test1_en-zh.tok.en.1best`. We can now compute the BLEU score by:
+When this is finished, we have the translations in `rs1/ted_test1_en-zh.tok.en.1best`. We can now compute the BLEU score by:
 
 ```bash
-../../../tools/multi-bleu.perl ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.en < model1/ted_test1_en-zh.tok.en.1best
+../../../tools/multi-bleu.perl ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.en < rs1/ted_test1_en-zh.tok.en.1best
 ```
 
 This should give a BLEU score of around 10.58.
@@ -97,15 +97,15 @@ cd ar-en
 Now, we run preprocess and train: 
 
 ```bash
-../../../scripts/preprocess-bpe.sh model1.hpm
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=12:00:00 -j y ../../../scripts/train.sh model1.hpm gpu
+../../../scripts/preprocess-bpe.sh rs1.hpm
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=12:00:00,num_proc=2 -j y ../../../scripts/train.sh rs1.hpm gpu
 ```
 
 Finally, we translated and measure BLEU:
 
 ```bash
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh model1.hpm ../multitarget-ted/en-ar/tok/ted_test1_en-ar.tok.ar model1/ted_test1_en-ar.tok.en.1best gpu
-../../../tools/multi-bleu.perl ../multitarget-ted/en-ar/tok/ted_test1_en-ar.tok.en < model1/ted_test1_en-ar.tok.en.1best
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh rs1.hpm ../multitarget-ted/en-ar/tok/ted_test1_en-ar.tok.ar rs1/ted_test1_en-ar.tok.en.1best gpu
+../../../tools/multi-bleu.perl ../multitarget-ted/en-ar/tok/ted_test1_en-ar.tok.en < rs1/ted_test1_en-ar.tok.en.1best
 ```
 
 The BLEU score should be around 20.52. 
@@ -114,7 +114,7 @@ For different source languages, just replace `ar` with the language code, e.g. `
 
 The test set BLEU scores of various tasks are:
 
-| Task  | Model1 |
+| Task  | rs1 |
 | ----- | ------ |
 | ar-en | 20.52  |
 | de-en | 25.65  |
