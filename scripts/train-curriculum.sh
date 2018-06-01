@@ -94,19 +94,19 @@ python -m sockeye.train -d $modeldir/prepared_data \
                         --disable-device-locking \
                         --decode-and-evaluate $decode_and_evaluate \
                         --decode-and-evaluate-use-cpu \
-                        --initial-learning-rate 0.0002 \
-                        --label-smoothing 0.1 \
-                        --batch-type sentence \
-                        --optimizer adam \
+                        --initial-learning-rate $initial_learning_rate  \
+                        --label-smoothing $label_smoothing \
+                        --batch-type word \
+                        --optimizer $optimizer \
                         --gradient-clipping-threshold 1.0 \
                         --gradient-clipping-type abs \
-                        --learning-rate-reduce-factor 0.7 \
+                        --learning-rate-reduce-factor $learning_rate_reduce_factor \
                         --learning-rate-reduce-num-not-improved 8 \
                         --learning-rate-scheduler-type plateau-reduce \
                         --learning-rate-decay-optimizer-states-reset best \
                         --learning-rate-decay-param-reset \
-                        --loss cross-entropy \
-                        --seed 13 \
+                        --loss $loss \
+                        --seed $seed \
                         $device \
                         -o $modeldir
 
