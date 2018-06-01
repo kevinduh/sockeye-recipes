@@ -8,7 +8,6 @@ The way to use this package is to specify settings in a file like "hyperparams.t
 then run the following scripts:
 - scripts/preprocess-bpe.sh: Preprocess bitext via BPE segmentation
 - scripts/train.sh: Train the NMT model given bitext
-- scripts/plot-validation-curve.sh: Compute BLEU curves by iteration on validation data
 - scripts/translate.sh: Translates a tokenized input file using an existing model
 
 
@@ -115,22 +114,7 @@ Alternatively, all these commands can also be used in conjunction with Univa Gri
 qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=24:00:00 -j y -o train.log path/to/sockeye-recipes/scripts/train.sh hyperparams.sample-de-en.2.txt gpu
 ```
 
-(5) We can measure how BLEU changes per iteration on the validation data with one of the following:
-
-
-```bash
-# CPU version on local machine:
-bash path/to/sockeye-recipes/scripts/plot-validation-curve.sh hyperparams.sample-de-en.txt cpu
-# GPU version on local machine:
-bash path/to/sockeye-recipes/scripts/plot-validation-curve.sh hyperparams.sample-de-en.txt gpu
-# GPU version with Univa Grid Engine:
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=24:00:00 -j y -o valid.log path/to/sockeye-recipes/plot-validation-curve.sh hyperparams.sample-de-en.2.txt gpu
-```
-
-After this finishes running, you can see the translation outputs in out.valid_bpe.* and corresponding BLEU scores in multibleu.valid_bpe.result, in the modeldir. 
-Note that for quick demonstration, this example uses very small data and very short training time. Mostly likely the translation will be junk and BLEU will be close to zero. 
-
-(6) Finally, we can translate new test sets with:
+(5) Finally, we can translate new test sets with:
 
 ```bash
 bash path/to/sockeye-recipes/scripts/translate.sh hyperparams.sample-de-en.2.txt input output device(cpu/gpu)
@@ -139,7 +123,7 @@ bash path/to/sockeye-recipes/scripts/translate.sh hyperparams.sample-de-en.2.txt
 This script will find the model from hyperparams file. Then it runs BPE on the input (which is assumed to be tokenized in the same way as train_tok and valid_tok), translates the result, runs de-BPE and saves in output. 
 
 
-(7) To visualize the learning curve, you can use tensorboard:
+(6) To visualize the learning curve, you can use tensorboard:
 
 ```bash
 source activate sockeye_cpu
