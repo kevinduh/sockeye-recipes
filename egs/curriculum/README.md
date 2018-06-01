@@ -8,7 +8,7 @@ This implementation makes the following assumptions:
 - Uses shards (originally meant for data parallelism) to split the data by hardness (complexity)
 
 
-#### Install custom sockeye with curriculum learning enabled
+## Install Custom Sockeye with Curriculum Learning enabled
 Checkout the `curriculum` branch of a custom sockeye from here
 ```bash
 cd path/to/sockeye-recipes
@@ -17,7 +17,7 @@ cd sockeye-curriculum
 git checkout curriculum
 ```
 
-Install this custom version of sockeye (will install the GPU version by default, CUDA 8.0)
+Install this custom version of sockeye (will install the GPU version by default)
 ```bash
 cd path/to/sockeye-recipes
 bash ./install/install_sockeye_custom -s [SOCKEYE_CURRICULUM_LOCATION] -e [ENV_NAME]
@@ -48,7 +48,7 @@ bash ./install/install_sockeye_custom -s path/to/sockeye-curriculum-with-changes
 (1) First, we assume that the TED de-en data in the `$rootdir/egs/ted` recipes is already prepared. If not, please run the following:
 
 ```bash
-[egs/curriculum] / cd ../ted/
+[egs/curriculum] cd ../ted/
 [egs/ted] ./0_download_data.sh
 [egs/ted] ./1_setup_task.sh de
 [egs/ted] cd de-en
@@ -57,7 +57,7 @@ bash ./install/install_sockeye_custom -s path/to/sockeye-curriculum-with-changes
 
 (2) Next, we can setup the curriculum learning task, starting in the `egs/curriculum` subdirectory. The following downloads an example curriculum score file that corresponds to the bitext in `egs/ted/de-en/data-bpe`, and setups the the hyperparameter file.
 
-``bash
+```bash
 cd $rootdir/egs/curriculum
 [egs/curriculum/] ./0_download_data.sh
 [egs/curriculum/] ./1_setup_task.sh
@@ -88,12 +88,12 @@ Note the main change to the hyperparameter file is the addition of `score_file` 
 ../../../scripts/train-curriculum.sh -p rs1.hpm -e sockeye-curriculum
 ```
 
-Alternatively, all these commands can also be used in conjunction with Univa Grid Engine, e.g.:
+Alternatively, you can run this command via the Sun/Univa Grid Engine, e.g.:
 ```bash
 qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=24:00:00 -j y -o train.log ../../../scripts/train-curriculum.sh -p rs1.hpm -e sockeye-curriculum
 ```
 
-(4) Validation and evaluation proceeds as usual. Hopefully the curriculum results in faster training or better translation compared to random minibatches. The result in `egs/curriculum/de-en/rs1` can be directly compared to `egs/ted/de-en/rs1`
+(4) Validation and evaluation proceeds as usual. Hopefully, curriculum learning leads to faster convergence or better translation results compared to standard random sampling of minibatches. The results in `egs/curriculum/de-en/rs1` can be directly compared to `egs/ted/de-en/rs1`
 
 (5) Examining the training logs
 The logs for curriculum training will indicate when the curriculum is updated and which shards are visible for training based on this constraint.
