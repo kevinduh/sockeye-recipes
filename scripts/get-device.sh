@@ -36,10 +36,12 @@ elif [ "$DEVICE" == "gpu" ]; then
     module load cuda90/toolkit
     
     if [ $CUDA_VISIBLE_DEVICES ]; then
-	# if CUDA_VISIBLE_DEVICES is already set, just return 0
-	# TODO: support multiGPU
-	device="--device-id 0"
-	devicelog="get-device.sh: On $HOSTNAME CUDA_VISIBLE_DEVICES = $CUDA_VISIBLE_DEVICES found, so set device_id = 0. `nvidia-smi`"
+	# if CUDA_VISIBLE_DEVICES is already set, just return 0,1,...,#maxid
+	visible=(${CUDA_VISIBLE_DEVICES//,/ })
+	maxid=$(expr "${#visible[@]}" - 1)
+	visible_mapping=$(seq -s ' ' 0 $maxid)
+	device="--device-ids $visible_mapping"
+	devicelog="get-device.sh: On $HOSTNAME CUDA_VISIBLE_DEVICES = $CUDA_VISIBLE_DEVICES found, map to device-ids = $visible_mapping. `nvidia-smi`"
 	
     else
 	# else, look for a free GPU
@@ -50,8 +52,8 @@ elif [ "$DEVICE" == "gpu" ]; then
 	if [ $numfree -gt 0 ]; then
             # randomly pick one gpu id to return
             pick=$(expr $RANDOM % $numfree )
-            device="--device-id ${freegpu[$pick]}"
-            echo "get-gpu.sh: Picking device_id = ${freegpu[$pick]} from free GPUs: ${freegpu[@]}. `nvidia-smi`"
+            device="--device-ids ${freegpu[$pick]}"
+            echo "get-gpu.sh: Picking device-id = ${freegpu[$pick]} from free GPUs: ${freegpu[@]}. `nvidia-smi`"
 	else
             # No GPUs, default back to CPU
             device="--use-cpu"
