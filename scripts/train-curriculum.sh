@@ -63,7 +63,7 @@ echo "$devicelog" >> $modeldir/cmdline.log
 # (2.1) Prepare the data into different shards by curriculum score file
 python -m sockeye.prepare_data -s $train_bpe_src \
                                -t $train_bpe_trg \
-                               --sentence-score-file $score_file \
+                               --curriculum-score-file $score_file \
                                --o $modeldir/prepared_data
 
 # (2.2) Train the model (this may take a while) 
