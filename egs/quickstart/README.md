@@ -71,7 +71,10 @@ Alternatively, all these commands can also be used in conjunction with the Sun/U
 ```
 sed "s|tiny_rnn|tiny_rnn_gpu|" tiny_rnn.hpm > tiny_rnn_gpu.hpm
 qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=24:00:00,num_proc=2 -j y path/to/sockeye-recipes/scripts/train.sh -p tiny_rnn_gpu.hpm -e sockeye_gpu
+(or)
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=24:00:00,num_proc=2 -j y ../../scripts/train.sh -p tiny_rnn_gpu.hpm -e sockeye_gpu
 ```
+
 
 For Multi-GPU training, you can set `-l gpu=1` to a larger number `-l gpu=2`; the script relies on CUDA_VISIBLE_DEVICES to pick the free GPU cards. It is strongly recommended that CUDA_VISIBLE_DEVICES is set in your system; if not, the script will pick a single free GPU based on nvidia-smi (but this is not guaranteed to be safe in a multi-user enivornment).
 
