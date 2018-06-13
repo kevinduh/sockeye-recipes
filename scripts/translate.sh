@@ -7,10 +7,12 @@ function errcho() {
 }
 
 function show_help() {
-  errcho "Usage: translate.sh -p hyperparams.txt -i input -o output -e ENV_NAME [-d DEVICE]"
-  errcho "input is a text file to be translated"
-  errcho "output is path of generated translations"
-  errcho "Device is optional and inferred from env"
+  errcho "Usage: translate.sh -p hyperparams.txt -i input -o output -e ENV_NAME [-d DEVICE] [-s]"
+  errcho "Input is a source text file to be translated"
+  errcho "Output is filename for target translations"
+  errcho "ENV_NAME is the sockeye conda environment name"
+  errcho "Device is optional and inferred from ENV"
+  errcho "-s is optional and skips BPE processing on input source"
   errcho ""
 }
 
@@ -21,7 +23,7 @@ function check_file_exists() {
   fi
 }
 
-while getopts ":h?p:e:i:o:d:" opt; do
+while getopts ":h?p:e:i:o:d:s" opt; do
   case "$opt" in
     h|\?)
       show_help
@@ -37,9 +39,16 @@ while getopts ":h?p:e:i:o:d:" opt; do
       ;;
     d) DEVICE=$OPTARG
       ;;
+    s) SKIP_SRC_BPE=1
+      ;;
   esac
 done
 
+if [[ -z $HYP_FILE || -z $ENV_NAME || -z $INPUT_FILE || -z $OUTPUT_FILE ]]; then
+    errcho "Missing arguments"
+    show_help
+    exit 1
+fi
 
 ###########################################
 # (0) Setup
@@ -63,13 +72,25 @@ echo "$devicelog" >> $LOG_FILE
 ###########################################
 # (2) Translate!
 subword=$rootdir/tools/subword-nmt/
-### Apply BPE to input, run Sockeye.translate, then de-BPE ###
-python $subword/apply_bpe.py --input $INPUT_FILE --codes $bpe_vocab_src | \
-    python -m sockeye.translate --models $modeldir $device \
-    --disable-device-locking \
-    --max-input-len 100 2>> $LOG_FILE | \
-    sed -r 's/@@( |$)//g' > $OUTPUT_FILE 
+max_input_len=100
 
+if [ "$SKIP_SRC_BPE" == 1 ]; then
+    ### Run Sockeye.translate, then de-BPE:
+    echo "Directly translating source input without applying BPE" >> $LOG_FILE
+    cat $INPUT_FILE | \
+	python -m sockeye.translate --models $modeldir $device \
+	--disable-device-locking \
+	--max-input-len $max_input_len 2>> $LOG_FILE | \
+	sed -r 's/@@( |$)//g' > $OUTPUT_FILE 
+else
+    ### Apply BPE to input, run Sockeye.translate, then de-BPE ###
+    echo "Apply BPE to source input" >> $LOG_FILE
+    python $subword/apply_bpe.py --input $INPUT_FILE --codes $bpe_vocab_src | \
+	python -m sockeye.translate --models $modeldir $device \
+	--disable-device-locking \
+	--max-input-len $max_input_len 2>> $LOG_FILE | \
+	sed -r 's/@@( |$)//g' > $OUTPUT_FILE 
+fi
 
 ##########################################
 datenow=`date '+%Y-%m-%d %H:%M:%S'`

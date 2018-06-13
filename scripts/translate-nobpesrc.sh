@@ -55,7 +55,6 @@ source $rootdir/scripts/get-device.sh $DEVICE ""
 ###########################################
 # (1) Book-keeping
 LOG_FILE=${OUTPUT_FILE}.log
-cp $HYP_FILE $modeldir/hyperparams.txt
 datenow=`date '+%Y-%m-%d %H:%M:%S'`
 echo "Start translating (nobpesrc): $datenow on $(hostname)" > $LOG_FILE
 echo "$0 $@" >> $LOG_FILE
@@ -67,6 +66,7 @@ subword=$rootdir/tools/subword-nmt/
 ### Run Sockeye.translate, then de-BPE ###
 cat $INPUT_FILE  | \
     python -m sockeye.translate --models $modeldir $device \
+    --batch-size 32 \
     --disable-device-locking \
     --max-input-len 100 2>> $LOG_FILE | \
     sed -r 's/@@( |$)//g' > $OUTPUT_FILE 
