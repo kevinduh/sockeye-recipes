@@ -20,14 +20,14 @@ git checkout curriculum
 Install this custom version of sockeye (will install the GPU version by default)
 ```bash
 cd path/to/sockeye-recipes
-bash ./install/install_sockeye_custom -s [SOCKEYE_CURRICULUM_LOCATION] -e [ENV_NAME]
+bash ./install/install_sockeye_custom.sh -s [SOCKEYE_CURRICULUM_LOCATION] -e [ENV_NAME]
 ```
 
 You may choose any `ENV_NAME`, but you will need to remember this for future experiments
 E.g.,
 ```bash
 cd path/to/sockeye-recipes
-bash ./install/install_sockeye_custom -s ./sockeye-curriculum -e sockeye-curriculum
+bash ./install/install_sockeye_custom.sh -s ./sockeye-curriculum -e sockeye-curriculum
 ```
 
 A list of your environments may be obtained by running `conda info --envs`
@@ -39,7 +39,7 @@ You may choose to make your own changes to the sockeye installation. To bring th
 Make sure that the `ENV_NAME` is the same as before, e.g.:
 ```bash
 cd path/to/sockeye-recipes
-bash ./install/install_sockeye_custom -s path/to/sockeye-curriculum-with-changes -e sockeye-curriculum
+bash ./install/install_sockeye_custom.sh -s path/to/sockeye-curriculum-with-changes -e sockeye-curriculum
 ```
 
 
