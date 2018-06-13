@@ -70,7 +70,18 @@ The `egs` subdirectory contains recipes for various datasets.
 
 * [egs/curriculum](egs/curriculum): Recipe for curriculum learning. Also explains how to use sockeye-recipes in conjunction with a custom sockeye installation.
 
-The [hpm](hpm) subdirectory contains hyperparameter (hpm) file templates. 
+
+The [hpm](hpm) subdirectory contains hyperparameter (hpm) file templates. Besides NMT hyerparameters, the most important variables in this file to set are below: 
+
+* rootdir: location of your sockeye-recipes installation, used for finding relevant scripts (i.e. this is current directory, where this README file is located.)
+
+* modeldir: directory for storing a single Sockeye model training process
+
+* workdir: directory for placing various modeldirs (i.e. a suite of experiments with different hyperparameters) corresponding to the same dataset
+
+* train_tok and valid_tok: prefix of tokenized training and validation bitext file path
+
+* train_bpe_{src,trg} and valid_bpe_{src,trg}: alternatively, prefix of the above training and validation files already processed by BPE
 
 
 ## Auto-Tuning ##
