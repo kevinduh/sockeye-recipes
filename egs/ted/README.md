@@ -45,12 +45,12 @@ The resulting BPE vocabulary file (for English) is: `data-bpe/train.bpe-30000.en
 To train, we will use qsub and gpu (On a GeForce GTX 1080 Ti, this should take about 4 hours):
 
 ```bash
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=12:00:00,num_proc=2 -j y ../../../scripts/train.sh rs1.hpm gpu
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=12:00:00,num_proc=2 -j y ../../../scripts/train.sh -p rs1.hpm -e sockeye_gpu
 ```
 
 Alternatively, if using local cpu:
 ```bash
-../../../scripts/train.sh rs1.hpm cpu
+../../../scripts/train.sh -p rs1.hpm -e sockeye_cpu
 ```
 
 
@@ -65,13 +65,13 @@ pwd
 The test set we want to translate is `../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh`. We translate it using rs1 via qsub on gpu (this should take 10 minutes or less):
 
 ```bash
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh rs1.hpm ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh rs1/ted_test1_en-zh.tok.en.1best gpu
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh -p rs1.hpm -i ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh -o rs1/ted_test1_en-zh.tok.en.1best -e sockeye_gpu
 ```
 
 Alternatively, to translate using local cpu:
 
 ```bash
-../../../scripts/translate.sh rs1.hpm ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh rs1/ted_test1_en-zh.tok.en.1best cpu
+../../../scripts/translate.sh -p rs1.hpm -i ../multitarget-ted/en-zh/tok/ted_test1_en-zh.tok.zh -o rs1/ted_test1_en-zh.tok.en.1best -e sockeye_cpu
 ```
 
 When this is finished, we have the translations in `rs1/ted_test1_en-zh.tok.en.1best`. We can now compute the BLEU score by:
@@ -98,13 +98,13 @@ Now, we run preprocess and train:
 
 ```bash
 ../../../scripts/preprocess-bpe.sh rs1.hpm
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=12:00:00,num_proc=2 -j y ../../../scripts/train.sh rs1.hpm gpu
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=12:00:00,num_proc=2 -j y ../../../scripts/train.sh -p rs1.hpm -e sockeye_gpu
 ```
 
 Finally, we translated and measure BLEU:
 
 ```bash
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh rs1.hpm ../multitarget-ted/en-ar/tok/ted_test1_en-ar.tok.ar rs1/ted_test1_en-ar.tok.en.1best gpu
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/translate.sh -p rs1.hpm -i ../multitarget-ted/en-ar/tok/ted_test1_en-ar.tok.ar -o rs1/ted_test1_en-ar.tok.en.1best -e sockeye_gpu
 ../../../tools/multi-bleu.perl ../multitarget-ted/en-ar/tok/ted_test1_en-ar.tok.en < rs1/ted_test1_en-ar.tok.en.1best
 ```
 
@@ -122,3 +122,5 @@ The test set BLEU scores of various tasks are:
 | ko-en | 8.45   |
 | ru-en | 16.18  |
 | zh-en | 10.58  |
+
+(TODO: the BLEU numbers need to be updated to reflect various changes. These are currently here just as reference)
