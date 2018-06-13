@@ -6,7 +6,9 @@ We will assume that all the data have already been preprocessed, in particular t
 
 ### Step 0: Setup
 
-We assume all data is at `D=/exp/scale18/mt/data` and you have a directory `U=/exp/username/sockeye-tutorial` where you will be working. Let's start by going to your directory and creating a `$workdir` for all your experiments (let's assume you want to do TED de-en):
+We assume all data is at `D=/exp/scale18/mt/data` and you have a directory `U=/exp/username/sockeye-tutorial` where you will be working. For the other grid (CLSP), you may have instead: `D=/export/a06/scale18mt/data` and you have a directory `U=/export/a06/username/sockeye-tutorial`.
+
+Let's start by going to your directory and creating a `$workdir` for all your experiments (let's assume you want to do TED de-en):
 
 ```bash
 cd $U
@@ -61,7 +63,9 @@ See [example.hpm](example.hpm) for a concrete example.
 
 Train the model with:
 ```bash
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=24:00:00,num_proc=2 -j y path/to/sockeye-recipes/scripts/train.sh -p mymodel1.hpm -e sockeye_gpu
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=24:00:00,num_proc=2,mem_free=20G -j y path/to/sockeye-recipes/scripts/train.sh -p mymodel1.hpm -e sockeye_gpu
+[CLSP grid] qsub -S /bin/bash -V -cwd -pe smp 2 -l gpu=1,mem_free=20G,ram_free=20G -j y path/to/sockeye-recipes/scripts/train.sh -p mymodel1.hpm -e sockeye_gpu
+
 ```
 
 Note we are requesting 1 GPU and 2 CPU slots. This is the recommended setting. 
@@ -73,7 +77,8 @@ While waiting, check these files in $modeldir: `cmdline.log` is sockeye-recipe's
 After we have at least one checkpoint, we can try translating the test set in `/exp/scale18/mt/data/de-en/ted/ted.test.bpe.de`:
 
 ```bash
-qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:50:00 -j y path/to/sockeye-recipes/scripts/translate.sh -i /exp/scale18/mt/data/de-en/ted/ted.test.bpe.de -o mymodel1/ted.test.tok.en.1best -p mymodel1.hpm -e sockeye_gpu -s
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:50:00,mem_free=20G -j y path/to/sockeye-recipes/scripts/translate.sh -i /exp/scale18/mt/data/de-en/ted/ted.test.bpe.de -o mymodel1/ted.test.tok.en.1best -p mymodel1.hpm -e sockeye_gpu -s
+[CLSP grid] qsub -S /bin/bash -V -cwd -l gpu=1,mem_free=20G,ram_free=20G -j y path/to/sockeye-recipes/scripts/translate.sh -i /exp/scale18/mt/data/de-en/ted/ted.test.bpe.de -o mymodel1/ted.test.tok.en.1best -p mymodel1.hpm -e sockeye_gpu -s
 ```
 
 Note that in this case, we are translating an input file that is already BPE'd. So we add the `-s` flag which skips BPE processing on the input. 
