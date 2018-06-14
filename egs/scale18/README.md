@@ -85,21 +85,22 @@ Note that in this case, we are translating an input file that is already BPE'd. 
 
 ## Continued Training
 
-It is easy to perform continued training via Sockeye (i.e. initialization parameters from a previous training run and starting another training run, possibly on different datasets). This is an useful technique for domain adaptation, among others.
+It is easy to perform continued training via Sockeye (i.e. initialize model parameters from a previous training run and starting another training run, possibly on different datasets). This is an useful technique for domain adaptation, among others.
 
 To enable continued training, just add one more variable to your hyperparameter file: `initmodeldir`. This should point to the `$modeldir` of some previous run, such as `/exp/username/sockeye-tutorial/de-en/ted/myexample1/` from before. 
 
-For the purposes of demonstrating continued training for domain adaptation, let's use a large pre-trained model located at `/home/hltcoe/kduh/p/scale/scale2018/sockeye-nmt/de-en/generaldomain/rm1`. Create a new hyperparameter file by `cp example-ct.hpm my-ct1.hpm` and add the following line anywhere:
+For the purposes of demonstrating continued training for domain adaptation, let's use a large pre-trained model located at `/home/hltcoe/kduh/p/scale/scale2018/sockeye-nmt/de-en/generaldomain/rm1`. Create a new hyperparameter file `my-ct1.hpm` and add the variable anywhere:
 
-```
-initmodeldir=/home/hltcoe/kduh/p/scale/scale2018/sockeye-nmt/de-en/generaldomain/rm1
+```bash
+cp example-ct.hpm my-ct1.hpm
+echo "initmodeldir=/home/hltcoe/kduh/p/scale/scale2018/sockeye-nmt/de-en/generaldomain/rm1" >> my-ct1.hpm
 ```
 
 Be sure to also change the `$modeldir`, `$workdir`, `$rootdir` to your own settings. 
 
-Also, continued training assume that the model architectures are the same for the initial and the new model. Sockeye will do a check and if the hyperparameters don't match, it will still run if it can (e.g. continued training a 1-layer RNN from a 2-layer initial model is doable), and will stop if it can't. Minor note: the above generaldomain model is based on the rm1 template (not the rs1 template in the first part of this tutorial). 
+Also, continued training assume that the model architectures are the same for the initial and the new model. Sockeye will do a check and if the hyperparameters don't match, it will still run if it can (e.g. continued training a 1-layer RNN from a 2-layer initial model is doable even if it is not guaranteed the results will be good), and will stop if it can't. (Minor note: the above generaldomain model is based on the 2-layer rm1 template, not the 1-layer rs1 template in the first part of this tutorial.)
 
-Running the following diff will show how the hpm is simply one extra line and making sure the hyperparameter match up with the initial model. 
+Running the following diff will show how the hpm is simply one extra line and some modifications to make sure the hyperparameters match up with the initial model. 
 ```
 diff example-ct.hpm example.hpm
 ```
