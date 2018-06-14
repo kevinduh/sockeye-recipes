@@ -83,3 +83,41 @@ qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:50:00,mem_free=20G -j y path
 
 Note that in this case, we are translating an input file that is already BPE'd. So we add the `-s` flag which skips BPE processing on the input. 
 
+## Continued Training
+
+It is easy to perform continued training via Sockeye (i.e. initialization parameters from a previous training run and starting another training run, possibly on different datasets). This is an useful technique for domain adaptation, among others.
+
+To enable continued training, just add one more variable to your hyperparameter file: `initmodeldir`. This should point to the `$modeldir` of some previous run, such as `/exp/username/sockeye-tutorial/de-en/ted/myexample1/` from before. 
+
+For the purposes of demonstrating continued training for domain adaptation, let's use a large pre-trained model located at `/home/hltcoe/kduh/p/scale/scale2018/sockeye-nmt/de-en/generaldomain/rm1`. Create a new hyperparameter file by `cp example-ct.hpm my-ct1.hpm` and add the following line anywhere:
+
+```
+initmodeldir=/home/hltcoe/kduh/p/scale/scale2018/sockeye-nmt/de-en/generaldomain/rm1
+```
+
+Be sure to also change the `$modeldir`, `$workdir`, `$rootdir` to your own settings. 
+
+Also, continued training assume that the model architectures are the same for the initial and the new model. Sockeye will do a check and if the hyperparameters don't match, it will still run if it can (e.g. continued training a 1-layer RNN from a 2-layer initial model is doable), and will stop if it can't. Minor note: the above generaldomain model is based on the rm1 template (not the rs1 template in the first part of this tutorial). 
+
+Running the following diff will show how the hpm is simply one extra line and making sure the hyperparameter match up with the initial model. 
+```
+diff example-ct.hpm example.hpm
+```
+
+Finally, we train using `continue-train.sh`, invoked in the same way as `train.sh`:
+
+```bash
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=24:00:00,num_proc=2,mem_free=20G -j y path/to/sockeye-recipes/scripts/continue-train.sh -p my-ct1.hpm -e sockeye_gpu
+```
+
+If you inspect the internals of `continue-train.sh` script, you will see that it is very similar to `train.sh`, except for three additional flags:
+
+```bash
+--params $initmodeldir/params.best \
+--source-vocab $initmodeldir/vocab.src.0.json \
+--target-vocab $initmodeldir/vocab.trg.0.json \
+```
+
+Basically, `--params` reads the best model from `$initmodeldir`, and the `{source,target}-vocab` are vocab files from the initial model that need to be fixed and provided to the new run to ensure the vocabulary-to-integer mapping is consistent. 
+
+If more variants of continued training are desired, it is recommended to create a script similar to `continue-train.sh` with additional flags like this for your own purposes. 
