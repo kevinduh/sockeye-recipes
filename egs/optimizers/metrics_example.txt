@@ -1,0 +1,47 @@
+==> rs1-adadelta1/metrics <==
+53	epoch=49	gradient-norm=0.6488045368193117	learning-rate=0.0002	perplexity-train=9.245711685404226	perplexity-val=19.177810501069484	time-elapsed=42855.6096868515	used-gpu-memory=5241
+
+==> rs1-adadelta2/metrics <==
+106	epoch=99	gradient-norm=0.646331052076236	learning-rate=0.000125	perplexity-train=5.931205161126268	perplexity-val=17.764304716054934	time-elapsed=27327.649465560913	used-gpu-memory=2003
+
+==> rs1-adagrad1/metrics <==
+106	epoch=99	gradient-norm=0.8005750562335572	learning-rate=0.0002	perplexity-train=362.4267092456198	perplexity-val=411.01041895592795	time-elapsed=25520.927542448044	used-gpu-memory=2045
+
+==> rs1-adagrad2/metrics <==
+106	epoch=99	gradient-norm=5.149027985793435	learning-rate=0.001	perplexity-train=160.06024546649402	perplexity-val=195.7036085193187	time-elapsed=25669.298426389694	used-gpu-memory=2003
+
+==> rs1-adam1b/metrics <==
+56	epoch=52	gradient-norm=0.736802105267268	learning-rate=9.799999999999998e-05	perplexity-train=5.365763368380692	perplexity-val=21.394515582427456	time-elapsed=43067.22669386864	used-gpu-memory=4401
+
+==> rs1-adam1/metrics <==
+67	epoch=62	gradient-norm=0.6093511085554294	learning-rate=6.859999999999999e-05	perplexity-train=4.936119535435217	perplexity-val=22.114465872656947	time-elapsed=15971.039350509644	used-gpu-memory=2067
+
+==> rs1-adam2b/metrics <==
+95	epoch=89	gradient-norm=0.2697245779947499	learning-rate=3.90625e-06	perplexity-train=4.847117928532245	perplexity-val=17.237030884733354	time-elapsed=21075.79010105133	used-gpu-memory=2117
+
+==> rs1-adam2/metrics <==
+81	epoch=75	gradient-norm=0.29200635154427274	learning-rate=1.5625e-05	perplexity-train=5.187702336282442	perplexity-val=19.271485909966337	time-elapsed=19245.4514605999	used-gpu-memory=2003
+
+==> rs1-eve1/metrics <==
+68	epoch=63	gradient-norm=0.2533694508247715	learning-rate=2.3529799999999993e-05	perplexity-train=3.447930822929592	perplexity-val=15.937875754473456	time-elapsed=19137.992956876755	used-gpu-memory=2067
+
+==> rs1-eve2/metrics <==
+106	epoch=99	gradient-norm=0.4988426632443744	learning-rate=0.00025	perplexity-train=13.962559683383354	perplexity-val=40.182036374875956	time-elapsed=25986.244242191315	used-gpu-memory=2117
+
+==> rs1-nadam1/metrics <==
+84	epoch=78	gradient-norm=0.6487707328024711	learning-rate=2.3529799999999993e-05	perplexity-train=5.761996090575797	perplexity-val=21.302696762158764	time-elapsed=21565.52435350418	used-gpu-memory=2067
+
+==> rs1-nadam2/metrics <==
+77	epoch=72	gradient-norm=0.26006041666880325	learning-rate=7.8125e-06	perplexity-train=3.675396556116021	perplexity-val=15.542805423783967	time-elapsed=19488.039617300034	used-gpu-memory=2045
+
+==> rs1-rmsprop1/metrics <==
+106	epoch=99	gradient-norm=0.7880677669451751	learning-rate=6.859999999999999e-05	perplexity-train=6.282109619902233	perplexity-val=19.36941696808902	time-elapsed=24634.058854341507	used-gpu-memory=9961
+
+==> rs1-rmsprop2/metrics <==
+79	epoch=74	gradient-norm=0.2926562145188354	learning-rate=1.5625e-05	perplexity-train=4.845270079993909	perplexity-val=16.230734114206356	time-elapsed=18293.72630739212	used-gpu-memory=4225
+
+==> rs1-sgd1/metrics <==
+106	epoch=99	gradient-norm=0.6516706458792499	learning-rate=0.0002	perplexity-train=4259.823520722866	perplexity-val=4171.054297579072	time-elapsed=22525.81328725815	used-gpu-memory=2067
+
+==> rs1-sgd2/metrics <==
+106	epoch=99	gradient-norm=0.4212245982595807	learning-rate=0.001	perplexity-train=602.6703195130998	perplexity-val=663.5382380557687	time-elapsed=23559.170986652374	used-gpu-memory=4225

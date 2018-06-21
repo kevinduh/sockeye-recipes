@@ -70,6 +70,7 @@ The `egs` subdirectory contains recipes for various datasets.
 
 * [egs/curriculum](egs/curriculum): Recipe for curriculum learning. Also explains how to use sockeye-recipes in conjunction with a custom sockeye installation.
 
+* [egs/optimizers](egs/optimizers): Example of training with different optimizers (e.g. ADAM, EVE, Nesterov ADAM, SGD, ...)
 
 The [hpm](hpm) subdirectory contains hyperparameter (hpm) file templates. Besides NMT hyerparameters, the most important variables in this file to set are below: 
 
