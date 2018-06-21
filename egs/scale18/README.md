@@ -21,10 +21,10 @@ cd de-en/ted
 We will start with a hyperparameter file template. Copy anything from `$rootdir/hpm` to your current directory, e.g.:
 
 ```bash
-cp $rootdir/hpm/rs1.hpm-template mymodel1.hpm
+cp $rootdir/hpm/rm1.hpm-template mymodel1.hpm
 ```
 
-Now, edit rs1.hpm, in particular editing the following basic paths and src/trg names:
+Now, edit rm1.hpm, in particular editing the following basic paths and src/trg names:
 
 * workdir=/exp/username/sockeye-tutorial/de-en/ted
 * modeldir=$workdir/mymodel1 (this can be anything you like)
@@ -98,7 +98,7 @@ echo "initmodeldir=/home/hltcoe/kduh/p/scale/scale2018/sockeye-nmt/de-en/general
 
 Be sure to also change the `$modeldir`, `$workdir`, `$rootdir` to your own settings. 
 
-Also, continued training assume that the model architectures are the same for the initial and the new model. Sockeye will do a check and if the hyperparameters don't match, it will still run if it can (e.g. continued training a 1-layer RNN from a 2-layer initial model is doable even if it is not guaranteed the results will be good), and will stop if it can't. (Minor note: the above generaldomain model is based on the 2-layer rm1 template, not the 1-layer rs1 template in the first part of this tutorial.)
+Also, continued training assume that the model architectures are the same for the initial and the new model. Sockeye will do a check and if the hyperparameters don't match, it will still run if it can (e.g. continued training a 1-layer RNN from a 2-layer initial model is doable even if it is not guaranteed the results will be good), and will stop if it can't. (Minor note: the above generaldomain model is based on the 2-layer rm1 template)
 
 Running the following diff will show how the hpm is simply one extra line and some modifications to make sure the hyperparameters match up with the initial model. 
 ```
