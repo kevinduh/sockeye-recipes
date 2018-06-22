@@ -39,7 +39,7 @@ bash ../../scripts/preprocess-bpe.sh tiny_rnn.hpm
 This is a standard way (though not the only way) to handle large vocabulary in NMT. Currently sockeye-recipes assumes BPE segmentation before training. The preprocess-bpe.sh script takes a hyperparams file as input and preprocesses accordingly. To get a flavor of BPE segmentation results (train.en is original, train.bpe-4000.en is BPE'ed, and the string '@@' indicates BPE boundary):
 
 ```bash
-head -3 sample-de-en/train.en data/train.bpe-4000.en
+head -3 sample-de-en/train.en data-bpe/train.bpe-4000.en
 ```
 
 (4a) Now, we can train the NMT model. Generally, the invocation is:
