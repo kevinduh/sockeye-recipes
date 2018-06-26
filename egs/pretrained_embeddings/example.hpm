@@ -53,6 +53,8 @@ trg=en
 train_tok=__TRAIN_TOK__
 valid_tok=__VALID_TOK__
 
+embeddings_src=__SRC_EMB__
+embeddings_trg=__TRG_EMB__
 
 #####################################################################
 # (1) preprocess-bpe.sh settings (modify if needed)                 #
