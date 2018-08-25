@@ -12,8 +12,6 @@ Anoop Kunchukuttan, Pratik Mehta, Pushpak Bhattacharyya
 Proc. of LREC 2018
 ```
 
-Throughout the day, we will 
-
 Schedule:
 * 09:30-11:00 Lecture I: Intro to NMT
 * 11:30-13:30 Lab I: Computing setup, Train 1st NMT model
@@ -40,7 +38,7 @@ cd sockeye-recipes
 bash ./install/install_sockeye_cpu.sh
 bash ./install/install_sockeye_gpu.sh
 bash ./install/install_tools.sh
-``
+```
 
 This creates conda environments for sockeye, which are activated by the sockeye-recipe scripts.
 You may get some warnings like "No matching distribution found for tensorflow" and "mxnet 1.1.0 has requirement numpy<=1.13.3, but you'll have numpy 1.15.1 which is incompatible." but those can be safely ignored. 
@@ -113,7 +111,7 @@ Note we are training on 1 GPU and 2 CPU slots. This is the recommended setting.
 
 While waiting, check these files in $modeldir: `cmdline.log` is sockeye-recipe's log and documents device information and time. `log` is sockeye's log and contains detailed training information. `metrics` contains useful statistics computed at each checkpoint. 
 
-<b>Translate a test set and evaluate</b> After we are finished training, we can try translating the test set: 
+<b>Translate a test set and evaluate:</b> After we are finished training, we can try translating the test set: 
 
 If you trained an Hindi->English model:
 ```bash
