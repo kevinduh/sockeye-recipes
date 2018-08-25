@@ -109,9 +109,9 @@ loss="cross-entropy"
 seed=13
 
 # Logging and stopping condition
-checkpoint_frequency=1000
+checkpoint_frequency=500
 min_num_epochs=0
-max_num_epochs=10
+max_num_epochs=40
 max_updates=50000
 keep_last_params=5
 decode_and_evaluate=-1

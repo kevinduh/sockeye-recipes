@@ -97,7 +97,7 @@ Hyperparameters for training include:
 * batch_size: sockeye-recipes default uses word batching, so this is number of words per batch
 * optimizer: adam, adadelta, etc.
 * initial_learning_rate: this is very important
-* checkpoint_frequency: Sockeye saves a model after this many updates (which corresponds to number of minibatchs processed). Our default is 1000 is to give results sooner than later. For larger datasets, set to 4000 or so is generally reasonable. Reduce this if you want more frequent checkpoints, but note this affects two things: (a) the learning rate schedule and convergence criteria are based on number of checkpoints, so changing this may affect training speed and model at convergence. (b) if decode_and_evaluate is set to anything except 0 (meaning that we will start a separate decoder process for the validation data), having small checkpoint_frequency may mean these separate jobs get queued up--not a big deal, but slows down the overall training script. 
+* checkpoint_frequency: Sockeye saves a model after this many updates (which corresponds to number of minibatchs processed). Here we set it small to give results sooner than later. For larger datasets, set to 4000 or so is generally reasonable. Reduce this if you want more frequent checkpoints, but note this affects two things: (a) the learning rate schedule and convergence criteria are based on number of checkpoints, so changing this may affect training speed and model at convergence. (b) if decode_and_evaluate is set to anything except 0 (meaning that we will start a separate decoder process for the validation data), having small checkpoint_frequency may mean these separate jobs get queued up--not a big deal, but slows down the overall training script. 
 * max_num_epochs and max_updates: if either of these are met, training stops. We can of course stop the training process at any point and use the best model so far. Usually it is safe to set this at a high value. We set it small here to finish quicker. 
 * keep_last_params: how many checkpoint models to keep. Set to -1 to keep all, but be wary of disk space
 
@@ -136,8 +136,12 @@ For example, make a new hyperparameter file:
 cp model1.hpm model2.hpm
 ```
 
-And modify BPE, model architecture, training algorithms, etc. 
-There are a range of possibilities. 
+There are a range of possibilities, including:
+- Try BPE preprocessing, use different number of operations
+- Try different model architecture (e.g. num_embed, num_hidden) or regularization (dropout rate)
+- Try different training algorithm (e.g. sgd, adadelta, adagrad, eve)
+- Try training on model1 longer
+- etc.
 
 For the adventurous, you can try modifying (or making your own) ../../../scripts/train.sh 
 to do CNN and Transformer architectures, which sockeye supports.
