@@ -79,14 +79,16 @@ In particular,
 <b>BPE Preprocessing:</b> Now, let's preprocess the data into BPE subword units:
 
 ```bash
+cd sockeye-recipes/egs/tutorial/sltu2018/
 bash ../../../scripts/preprocess-bpe.sh model1.hpm
 ```
 
+Checkout the results in `data-bpe`.
 Note we usually need to specify where to find the BPE'd data by setting `{train,valid}_bpe_{src,trg}`, but in this case, if you follow the standard settings, it will work for you. 
 
-<b>Train:</b> We are ready to train! Again, look at the hyperparameter file model1.hpm.
+<b>Train:</b> We are ready to train! Before doing so, make sure you are in a tmux or screen session so your long job won't get lost. 
 
-The NMT model architecture hyperparameters we may be interested include:
+Again, let's look one more time at the hyperparameter file model1.hpm. The NMT model architecture hyperparameters we may be interested include:
 
 * num_embed: size of word embeddings
 * rnn_num_hidden: size of rnn hidden layer
