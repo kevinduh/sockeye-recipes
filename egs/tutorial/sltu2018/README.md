@@ -43,12 +43,12 @@ bash ./install/install_tools.sh
 This creates conda environments for sockeye, which are activated by the sockeye-recipe scripts.
 You may get some warnings like "No matching distribution found for tensorflow" and "mxnet 1.1.0 has requirement numpy<=1.13.3, but you'll have numpy 1.15.1 which is incompatible." but those can be safely ignored. 
 
-Next, follow the tutorial in [quickstart](../../quickstart/)
+Next, follow the tutorial in [quickstart](../../quickstart/).
 This will guide you through the basics of building a model on a toy dataset (which should only take minutes). We will make sure this works, before proceeding to train on real data. 
 
 ### Step 3: Train your first NMT model
 
-<b>Data and setup:</b> First, download the Hindi-English data  [here](http://www.cs.jhu.edu/~kevinduh/t/sltu2018/IITB-corpus.tgz), into your home directory.
+<b>Data and setup:</b> First, download the Hindi-English data into your home directory.
 
 ```bash
 cd
