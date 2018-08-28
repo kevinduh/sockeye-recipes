@@ -28,7 +28,7 @@ Follow these instructions to get logged in to an
 Amazon Web Service (AWS) instance:
 
 <b>GNU Linux, Unix, MacOS X</b>
-Using the provided [SSH key](), login on an assigned machine using the username ubuntu. Using the command line SSH, this can be done using the following command:
+Using the provided [SSH key](http://www.cs.jhu.edu/~kevinduh/t/sltu2018/sltu18_public.pem), login on an assigned machine using the username ec2-user. Using the command line SSH, this can be done using the following command:
    
 ```bash
 ssh -i sltu18_public.pem ec2-user@<machine-name>
@@ -41,14 +41,17 @@ chmod 600 sltu18_public.pem
 ```
 
 <b>MS Windows</b>
-For MS Windows, no SSH client is comming as a standard part of the OS. We suggest to install [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/). We provide additional information about PuTTY setup [here](http://kaldi-asr.org/tutorials/sltu18/sltu18-putty.html). Please note that PuTTY needs the key in a special format. You can download the key [here]().
+For MS Windows, no SSH client is comming as a standard part of the OS. We suggest to install [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/). We provide additional information about PuTTY setup [here](http://kaldi-asr.org/tutorials/sltu18/sltu18-putty.html). Please note that PuTTY needs the key in a special format. You can download the key [here](http://www.cs.jhu.edu/~kevinduh/t/sltu2018/sltu18_public.ppk).
 
 Once you've log in, run the command `screen -S YourTeamName` (or tmux if you prefer). That command ensures that even if the connection to the machine is dropped, the scripts will still keep running, so you won't have to run everything from scratch.
 
 In case you need to restore the connection (for example after a lunch break), use the command screen -ls to see the already opened sessions. Also, it is possible to see two (or even more) sessions, especially in case you were working in pairs (but each on their own computer). You can guess which is the right by looking at the date of the session and it's state. You want to primarily consider the sessions that are in "Dettached" state.
 
-Important: after you're done, set the following according to your assigned device on the grid
+Important: after you're done, set the following according to your assigned device on the grid:
+
+```bash
 export CUDA_VISIBLE_DEVICES=$YOUR_ASSIGNED_DEVICE
+```
 
 ### Step 1: Quickstart on Sockeye-Recipes
 
