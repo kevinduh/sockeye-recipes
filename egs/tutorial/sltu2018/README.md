@@ -21,41 +21,62 @@ Schedule:
 ### Step 0: Computing Setup with AWS
 
 Please form teams of 2 or 3 people each. 
-Follow instructions [here](http://kaldi-asr.org/tutorials/sltu18/sltu18.html)
-to get logged in to an Amazon Web Service (AWS) instance. 
-Each team will have a Linux instance with a GPU at your disposal. 
+Decide a TeamName and decide whether to work on Hindi-to-English or English-to-Hindi translation. Sign up on this [Google sheet](https://docs.google.com/spreadsheets/d/1nQDbDsY_LlkIEvkrJ0-niqpH8aZW3BS5E-pT7f_jMLs/edit?usp=sharing).
+
+
+Follow these instructions to get logged in to an 
+Amazon Web Service (AWS) instance:
+
+<b>GNU Linux, Unix, MacOS X</b>
+Using the provided [SSH key](), login on an assigned machine using the username ubuntu. Using the command line SSH, this can be done using the following command:
+   
+```bash
+ssh -i sltu18_public.pem ec2-user@<machine-name>
+```
+
+where <machine-name> is the address of the machine with the same number you've been assigned. Please note that after downloading, you might need to change the access rights to the file sltu18_public.pem to allow only the current user to read the file (it's a security precaution built-in into OpenSSH clients). This can be done using the following command
+
+```bash
+chmod 600 sltu18_public.pem
+```
+
+<b>MS Windows</b>
+For MS Windows, no SSH client is comming as a standard part of the OS. We suggest to install [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/). We provide additional information about PuTTY setup [here](http://kaldi-asr.org/tutorials/sltu18/sltu18-putty.html). Please note that PuTTY needs the key in a special format. You can download the key [here]().
+
+Once you've log in, run the command `screen -S YourTeamName` (or tmux if you prefer). That command ensures that even if the connection to the machine is dropped, the scripts will still keep running, so you won't have to run everything from scratch.
+
+In case you need to restore the connection (for example after a lunch break), use the command screen -ls to see the already opened sessions. Also, it is possible to see two (or even more) sessions, especially in case you were working in pairs (but each on their own computer). You can guess which is the right by looking at the date of the session and it's state. You want to primarily consider the sessions that are in "Dettached" state.
+
+Important: after you're done, set the following according to your assigned device on the grid
+export CUDA_VISIBLE_DEVICES=$YOUR_ASSIGNED_DEVICE
 
 ### Step 1: Quickstart on Sockeye-Recipes
 
-First, follow the instructions [here](https://github.com/kevinduh/sockeye-recipes) to 
-install sockeye-recipes in your home directory. Basically, do the following:
+Different teams will be sharing the same AWS instance with the same ec2-user login. To prevent conflicts, everyone should do their work under a TeamName directory created as such: 
 
 ```bash
-cd
+mkdir ~/YourTeamName
+cd ~/YourTeamName
 pwd
+```
+
+Install sockeye-recipes:
+
+```
 git clone https://github.com/kevinduh/sockeye-recipes
 cd sockeye-recipes
-bash ./install/install_sockeye_cpu.sh
-bash ./install/install_sockeye_gpu.sh
 bash ./install/install_tools.sh
 ```
 
-This creates conda environments for sockeye, which are activated by the sockeye-recipe scripts.
-You may get some warnings like "No matching distribution found for tensorflow" and "mxnet 1.1.0 has requirement numpy<=1.13.3, but you'll have numpy 1.15.1 which is incompatible." but those can be safely ignored. 
+Note, if you are doing this from scratch by yourself on your own machine, you would also need to install the core sockeye engine via `./install/install_sockeye_cpu.sh` and `./install/install_sockeye_gpu.sh`. These scripts create conda environments for sockeye, which are activated by the sockeye-recipe scripts. You may get some warnings like "No matching distribution found for tensorflow" and "mxnet 1.1.0 has requirement numpy<=1.13.3, but you'll have numpy 1.15.1 which is incompatible." but those can be safely ignored. In any case, this has already been done for you this time, so can be skipped.
 
 Next, follow the tutorial in [quickstart](../../quickstart/).
 This will guide you through the basics of building a model on a toy dataset (which should only take minutes). We will make sure this works, before proceeding to train on real data. 
 
 ### Step 3: Train your first NMT model
 
-<b>Data and setup:</b> First, download the Hindi-English data into your home directory.
-
-```bash
-cd
-pwd
-wget http://www.cs.jhu.edu/~kevinduh/t/sltu2018/IITB-corpus.tgz
-tar -xzvf IITB-corpus.tgz
-```
+<b>Data and setup:</b> First, the Hindi-English data is already downloaded 
+but if you need it for your own purposes, get it from [here](http://www.cs.jhu.edu/~kevinduh/t/sltu2018/IITB-corpus.tgz)
 
 See the files to get a feeling for the corpus: 
 ```bash
@@ -64,6 +85,7 @@ head -n3 IITB-corpus/IITB.*
 
 We are going to train a model specified in model1.hpm. Look at this hyperparameter file and make sure you understand it: 
 ```bash
+cd YourTeamName/sockeye-recipes/egs/tutorial/sltu2018/
 cat model1.hpm
 ```
 
@@ -79,7 +101,7 @@ In particular,
 <b>BPE Preprocessing:</b> Now, let's preprocess the data into BPE subword units:
 
 ```bash
-cd sockeye-recipes/egs/tutorial/sltu2018/
+cd YourTeamName/sockeye-recipes/egs/tutorial/sltu2018/
 bash ../../../scripts/preprocess-bpe.sh model1.hpm
 ```
 
