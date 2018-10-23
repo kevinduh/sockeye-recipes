@@ -110,7 +110,7 @@ python -m sockeye.train -s $train_bpe_src \
                         --learning-rate-decay-param-reset \
                         --max-num-checkpoint-not-improved 32 \
                         --loss $loss \
-                        --seed $seed\ 
+                        --seed $seed \
                         --params $initmodeldir/params.best \
                         --source-vocab $initmodeldir/vocab.src.0.json \
                         --target-vocab $initmodeldir/vocab.trg.0.json \
