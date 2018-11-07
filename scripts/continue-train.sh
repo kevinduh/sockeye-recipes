@@ -7,8 +7,9 @@ function errcho() {
 }
 
 function show_help() {
-  errcho "Usage: continue-train.sh -p hyperparams.txt -e ENV_NAME [-d DEVICE]"
+  errcho "Usage: continue-train.sh -p hyperparams.txt -e ENV_NAME [-c checkpoint] [-d DEVICE]"
   errcho "Device is optional and inferred from env"
+  errcho "Checkpoint is optional and specifies which model checkpoint to use from the init model (-c 00005)"
   errcho "The hyperparams file should contain initmodeldir, the model to start from"
   errcho ""
 }
@@ -20,7 +21,8 @@ function check_file_exists() {
   fi
 }
 
-while getopts ":h?p:e:d:" opt; do
+PARAMS_NAME="params.best"
+while getopts ":h?p:e:c:d:" opt; do
   case "$opt" in
     h|\?)
       show_help
@@ -30,6 +32,8 @@ while getopts ":h?p:e:d:" opt; do
       ;;
     e) ENV_NAME=$OPTARG
       ;;
+    c) PARAMS_NAME="params.$OPTARG"
+       ;;
     d) DEVICE=$OPTARG
       ;;
   esac
@@ -101,14 +105,11 @@ python -m sockeye.train -s $train_bpe_src \
                         --learning-rate-decay-param-reset \
                         --loss $loss \
                         --seed $seed \
-                        --params $initmodeldir/params.best \
+                        --params $initmodeldir/$PARAMS_NAME \
                         --source-vocab $initmodeldir/vocab.src.0.json \
                         --target-vocab $initmodeldir/vocab.trg.0.json \
                         $device \
                         -o $modeldir
-
-
-
 
 ##########################################
 datenow=`date '+%Y-%m-%d %H:%M:%S'`
