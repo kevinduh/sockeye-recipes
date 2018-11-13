@@ -77,9 +77,9 @@ export PYTHONNOUSERSITE=1
 # 2. clone sockeye NMT as submodule and install
 cd $SOCKEYE
 if [[ "$DEVICE" == "gpu" ]]; then
-  pip install -r requirements.gpu-cu90.txt
+  pip install -r requirements/requirements.gpu-cu90.txt
 elif [[ "$DEVICE" == "cpu" ]]; then
-  pip install -r requirements.txt
+  pip install -r requirements/requirements.txt
 else
   errcho "Invalid device name; must be one of cpu or gpu"
   exit 1
