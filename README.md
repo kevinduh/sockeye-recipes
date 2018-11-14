@@ -2,7 +2,7 @@
 
 Training scripts and recipes for the Sockeye Neural Machine Translation (NMT) toolkit
 - The original Sockeye codebase is at [AWS Labs](https://github.com/awslabs/sockeye)
-- This version is based off [a stable fork](https://github.com/kevinduh/sockeye). The current sockeye version that sockeye-recipes is built on is: 1.18.15. 
+- This version is based off [a stable fork](https://github.com/kevinduh/sockeye). The current sockeye version that sockeye-recipes is built on is: 1.18.57. 
 
 This package contains scripts that makes it easy to run NMT experiments.
 The way to use this package is to specify settings in a file like "hyperparams.txt", 
@@ -37,10 +37,17 @@ The third install_tools.sh script simply installs some helper tools, such as BPE
 When the sockeye version is updated, it is recommended to re-run the installation scripts in a clean conda environment:
 
 ```bash
-conda remove --name sockeye_gpu --all
 conda remove --name sockeye_cpu --all
+conda remove --name sockeye_gpu --all
 bash ./install/install_sockeye_cpu.sh
 bash ./install/install_sockeye_gpu.sh
+```
+
+If you want to back-up an existing version of the conda environment, run this before re-installing:
+
+```bash
+conda create --name sockeye_gpu_bkup --clone sockeye_gpu
+conda create --name sockeye_cpu_bkup --clone sockeye_cpu
 ```
 
 #### Environment Setup

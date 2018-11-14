@@ -68,7 +68,7 @@ check_dir_exists $SOCKEYE
 venv=$ENV_NAME # set your virtual enviroment name
 if [[ "$FORCE_NEW_ENV" == true || ! -d $CONDA_HOME/$ENV_NAME ]]; then
   errcho "Creating new Conda env : $ENV_NAME"
-  conda create -y -n $venv python=3
+  conda create -y -n $venv python=3.6
 fi
 
 source activate $venv
