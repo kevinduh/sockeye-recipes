@@ -7,11 +7,12 @@ function errcho() {
 }
 
 function show_help() {
-  errcho "Usage: translate.sh -p hyperparams.txt -i input -o output -e ENV_NAME [-d DEVICE] [-s]"
+  errcho "Usage: translate.sh -p hyperparams.txt -i input -o output -e ENV_NAME [-d DEVICE] [-c checkpoint] [-s]"
   errcho "Input is a source text file to be translated"
   errcho "Output is filename for target translations"
   errcho "ENV_NAME is the sockeye conda environment name"
   errcho "Device is optional and inferred from ENV"
+  errcho "Checkpoint is optional and specifies which model checkpoint to use while decoding (-c 00005)"
   errcho "-s is optional and skips BPE processing on input source"
   errcho ""
 }
@@ -23,7 +24,7 @@ function check_file_exists() {
   fi
 }
 
-while getopts ":h?p:e:i:o:d:s" opt; do
+while getopts ":h?p:e:i:o:d:c:s" opt; do
   case "$opt" in
     h|\?)
       show_help
@@ -38,6 +39,8 @@ while getopts ":h?p:e:i:o:d:s" opt; do
     o) OUTPUT_FILE=$OPTARG
       ;;
     d) DEVICE=$OPTARG
+      ;;
+    c) CHECKPOINT=$OPTARG
       ;;
     s) SKIP_SRC_BPE=1
       ;;
@@ -61,6 +64,9 @@ source activate $ENV_NAME
 # options for cpu vs gpu training (may need to modify for different grids)
 source $rootdir/scripts/get-device.sh $DEVICE ""
 
+# If the checkpoint is provided, add the argument tag
+[ -z $CHECKPOINT ] || CHECKPOINT="-c $CHECKPOINT"
+
 ###########################################
 # (1) Book-keeping
 LOG_FILE=${OUTPUT_FILE}.log
@@ -80,6 +86,7 @@ if [ "$SKIP_SRC_BPE" == 1 ]; then
     cat $INPUT_FILE | \
 	python -m sockeye.translate --models $modeldir $device \
 	--disable-device-locking \
+  $CHECKPOINT \
 	--max-input-len $max_input_len 2>> $LOG_FILE | \
 	sed -r 's/@@( |$)//g' > $OUTPUT_FILE 
 else
@@ -88,6 +95,7 @@ else
     python $subword/apply_bpe.py --input $INPUT_FILE --codes $bpe_vocab_src | \
 	python -m sockeye.translate --models $modeldir $device \
 	--disable-device-locking \
+  $CHECKPOINT \
 	--max-input-len $max_input_len 2>> $LOG_FILE | \
 	sed -r 's/@@( |$)//g' > $OUTPUT_FILE 
 fi
