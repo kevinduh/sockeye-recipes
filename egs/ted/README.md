@@ -53,6 +53,12 @@ Alternatively, if using local cpu:
 ../../../scripts/train.sh -p rs1.hpm -e sockeye_cpu
 ```
 
+For the transformer models (e.g. tm1.hpm), there is a different training script, train-alloptions.sh instead of train.sh:
+
+```bash
+qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=12:00:00,num_proc=2 -j y ../../../scripts/train-alloptions.sh -p tm1.hpm -e sockeye_gpu
+```
+
 
 ### 3. Evaluation
 
@@ -108,19 +114,28 @@ qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=00:30:00 -j y ../../../scripts/
 ../../../tools/multi-bleu.perl ../multitarget-ted/en-ar/tok/ted_test1_en-ar.tok.en < rs1/ted_test1_en-ar.tok.en.1best
 ```
 
-The BLEU score should be around 20.52. 
-
-For different source languages, just replace `ar` with the language code, e.g. `de`. 
+The BLEU score should be around 23. For different source languages, just replace `ar` with the language code, e.g. `de`. 
 
 The test set BLEU scores of various tasks are:
 
-| Task  | rs1 |
-| ----- | ------ |
-| ar-en | 20.52  |
-| de-en | 25.65  |
-| fa-en | 14.62  |
-| ko-en | 8.45   |
-| ru-en | 16.18  |
-| zh-en | 10.58  |
-
-(TODO: the BLEU numbers need to be updated to reflect various changes. These are currently here just as reference)
+ task | rs1 | rm1 | tm1 |
+  --- | --- | --- | --- |
+ar-en | 23.81  | 27.50  | 28.28  |
+bg-en | 31.63  | 35.84  | 35.93  |
+cs-en | 20.43  | 25.80  | 26.05  |
+de-en | 28.79  | 31.34  | 32.46  |
+fa-en | 17.38  | 21.21  | 22.08  |
+fr-en | 31.39  | 35.01  | 35.09  |
+he-en | 29.68  | 32.76  | 35.09  |
+hu-en | 15.33  | 20.64  | 21.14  |
+id-en | 22.89  | 26.85  | 27.47  |
+ja-en | 3.63  | 10.42  | 10.90  |
+ko-en | 10.28  | 14.30  | 15.23  |
+pl-en | 10.00  | 21.97  | 23.56  |
+pt-en | 37.79  | 40.80  | 41.80  |
+ro-en | 29.42  | 34.56  | 34.96  |
+ru-en | 18.76  | 22.58  | 24.03  |
+tr-en | 4.38  | 18.78  | 22.40  |
+uk-en | 2.54  | 16.99  | 17.87  |
+vi-en | 21.03  | 24.15  | 25.39  |
+zh-en | 13.29  | 15.83  | 16.63  |

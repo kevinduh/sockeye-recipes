@@ -20,7 +20,7 @@ workdir="./"
 
 mkdir -p ${src}-${trg}
 
-for model in rs1 ; do
+for model in rs1 rm1 tm1 ; do
     sed "s#__SRC__#${src}#g; s#__TRG__#${trg}#g;" $rootdir/hpm/$model.hpm-template \
 	| sed "s#__WORKDIR__#${workdir}#g; " \
 	| sed "s#__ROOTDIR__#${rootdir}#g; " \
