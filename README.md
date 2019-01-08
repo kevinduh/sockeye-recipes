@@ -56,7 +56,7 @@ Depending on your computer setup, you may want add the following configurations 
 Configure CUDA and CuDNN for the GPU version of Sockeye:
 
 ```bash
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/NVIDIA/cuda-9.0/lib64
 ```
 
 Set up a clean UTF-8 environment to avoid encoding errors:
