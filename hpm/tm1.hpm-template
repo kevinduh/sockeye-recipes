@@ -110,6 +110,7 @@ seed=13
 
 # Logging and stopping condition
 checkpoint_frequency=4000
+max_num_checkpoint_not_improved=8
 min_num_epochs=0
 max_num_epochs=100
 max_updates=500000

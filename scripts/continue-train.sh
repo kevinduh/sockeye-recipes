@@ -64,21 +64,20 @@ echo "Start Continued Training: $datenow on $(hostname)" >> $modeldir/cmdline.lo
 echo "$0 $@" >> $modeldir/cmdline.log
 echo "$devicelog" >> $modeldir/cmdline.log
 
+# get model specific arguments 
+source $rootdir/scripts/model-specific-args.sh $HYP_FILE
+
 ###########################################
 # (2) Train the model (this may take a while) 
 python -m sockeye.train -s $train_bpe_src \
                         -t $train_bpe_trg \
                         -vs $valid_bpe_src \
                         -vt $valid_bpe_trg \
-                        --encoder rnn \
-                        --decoder rnn \
+                        --encoder $encoder \
+                        --decoder $decoder \
+                        $modelargs \
                         --num-embed $num_embed \
                         --num-layers $num_layers \
-                        --rnn-num-hidden $rnn_num_hidden \
-                        --rnn-attention-type $rnn_attention_type \
-                        --rnn-cell-type $rnn_cell_type \
-                        --rnn-dropout-inputs $rnn_dropout_inputs \
-                        --rnn-dropout-states $rnn_dropout_states \
                         --embed-dropout $embed_dropout \
                         --max-seq-len $max_seq_len \
                         --num-words $num_words \
@@ -103,6 +102,7 @@ python -m sockeye.train -s $train_bpe_src \
                         --learning-rate-scheduler-type plateau-reduce \
                         --learning-rate-decay-optimizer-states-reset best \
                         --learning-rate-decay-param-reset \
+                        --max-num-checkpoint-not-improved $max_num_checkpoint_not_improved \
                         --loss $loss \
                         --seed $seed \
                         --params $initmodeldir/$PARAMS_NAME \

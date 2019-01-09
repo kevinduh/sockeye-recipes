@@ -79,6 +79,8 @@ bpe_vocab_trg=${train_bpe_trg}.bpe_vocab
 #####################################################################
 
 # Model architecture
+encoder="rnn"
+decoder="rnn"
 num_embed="500:500"
 rnn_num_hidden=200
 rnn_attention_type="dot"
@@ -96,6 +98,7 @@ rnn_dropout_states=".0:.0"
 
 # Logging and stopping condition
 checkpoint_frequency=5000
+max_num_checkpoint_not_improved=8
 min_num_epochs=0
 max_num_epochs=100
 max_updates=500000
