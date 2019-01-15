@@ -73,6 +73,8 @@ sed "s|tiny_rnn|tiny_rnn_gpu|" tiny_rnn.hpm > tiny_rnn_gpu.hpm
 qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=24:00:00,num_proc=2 -j y path/to/sockeye-recipes/scripts/train.sh -p tiny_rnn_gpu.hpm -e sockeye_gpu
 (or)
 qsub -S /bin/bash -V -cwd -q gpu.q -l gpu=1,h_rt=24:00:00,num_proc=2 -j y ../../scripts/train.sh -p tiny_rnn_gpu.hpm -e sockeye_gpu
+(or for CLSP grid)
+qsub -S /bin/bash -V -cwd  -l gpu=1,h_rt=24:00:00,num_proc=2 -j y ../../scripts/train.sh -p tiny_rnn_gpu.hpm -e sockeye_gpu
 ```
 
 
