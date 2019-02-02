@@ -93,12 +93,12 @@ python -m sockeye.train -s $train_bpe_src \
                         --gradient-clipping-threshold 1.0 \
                         --gradient-clipping-type abs \
                         --learning-rate-reduce-factor $learning_rate_reduce_factor \
-                        --learning-rate-reduce-num-not-improved 8 \
+                        --learning-rate-reduce-num-not-improved $learning_rate_reduce_num_not_improved \
                         --learning-rate-scheduler-type plateau-reduce \
                         --learning-rate-decay-optimizer-states-reset best \
                         --learning-rate-decay-param-reset \
                         --max-num-checkpoint-not-improved $max_num_checkpoint_not_improved \
-			                  --loss $loss \
+                        --loss $loss \
                         --seed $seed \
                         $device \
                         -o $modeldir

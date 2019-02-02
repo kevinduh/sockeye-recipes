@@ -101,6 +101,7 @@ batch_size=4096
 optimizer=rmsprop
 initial_learning_rate=0.001
 learning_rate_reduce_factor=0.5
+learning_rate_reduce_num_not_improved=8
 loss="cross-entropy"
 seed=13
 
