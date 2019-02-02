@@ -32,7 +32,7 @@ source $HYP_FILE
 
 modelargs=""
 
-if [ "$encoder" -eq "rnn" ] || [ "$decoder" -eq "rnn" ] ; then
+if [[ "$encoder" == "rnn"  ||  "$decoder" == "rnn" ]] ; then
 	modelargs="--rnn-num-hidden $rnn_num_hidden \
            	   --rnn-attention-type $rnn_attention_type \
                --rnn-cell-type $rnn_cell_type \
@@ -40,7 +40,7 @@ if [ "$encoder" -eq "rnn" ] || [ "$decoder" -eq "rnn" ] ; then
                --rnn-dropout-states $rnn_dropout_states"
 fi
 
-if [ "$encoder" -eq "cnn" ] || [ "$decoder" -eq "cnn" ] ; then
+if [[ "$encoder" == "cnn"  ||  "$decoder" == "cnn" ]] ; then
 	modelargs="$modelargs \
 			   --cnn-kernel-width $cnn_kernel_width \
 	           --cnn-num-hidden $cnn_num_hidden \
@@ -50,7 +50,7 @@ if [ "$encoder" -eq "cnn" ] || [ "$decoder" -eq "cnn" ] ; then
 	           --cnn-hidden-dropout 0.2"
 fi
 
-if [ "$encoder" -eq "transformer" ] || [ "$decoder" -eq "transformer" ] ; then
+if [[ "$encoder" == "transformer"  ||  "$decoder" == "transformer" ]] ; then
 	modelargs="$modelargs \
 			   --transformer-model-size $transformer_model_size \
 	           --transformer-attention-heads $transformer_attention_heads \
