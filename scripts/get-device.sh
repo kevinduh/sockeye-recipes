@@ -35,7 +35,8 @@ fi
 # Otherwise assume that CUDA is available in standard paths
 type module > /dev/null
 if [ "$?" -eq 0 ] ; then
-    module load cuda90/toolkit
+    module load cuda10.0/toolkit
+    module load cudnn/7.5.0_cuda10.0
 fi
 
 
