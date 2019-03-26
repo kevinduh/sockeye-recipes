@@ -19,7 +19,7 @@ else
 fi
 
 # 2. Download example curriculum score file for the above bitext
-scorefile=https://raw.githubusercontent.com/KentonMurray/curriculum_scorer/master/model_scores/scores/ted.train.tok.en.forcedecode_scores.noquote_deleteslash.prob.gk
+scorefile=https://raw.githubusercontent.com/Este1le/curriculum_learning_scores/master/scores/data_scores_ted/ted.sentence_average_rank.de.bk
 wget $scorefile -O $outdir/curriculum_sent.scores
 
 echo "Make sure the #lines in scores and bitext match up:"
