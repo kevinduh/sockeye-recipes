@@ -16,6 +16,15 @@ emb_matrix = []
 vocab = []
 
 with codecs.open(vec_filename, encoding="utf8") as vec_file:
+
+  # add special tokens to with id's 0, 1, 2
+  first_line = vec_file.readline().strip().split()
+  for special_token in ["<pad>", "<unk>", "<s>"]:
+    vocab.append(special_token)
+    emb_matrix.append(np.asarray(first_line[1:], dtype=np.float32).reshape(-1, 1))
+
+  # read from the vector file
+  vec_file.seek(0)
   for line in vec_file:
     line = line.strip().split()
     vocab.append(line[0])
@@ -30,6 +39,7 @@ print("Rescaled mean of emb matrix (per feature) from " + str(old_mean) + " to "
 print("Shape of emb matrix = " + str(emb_matrix.shape))
 
 filtered_vocab = {vocab[idx] : idx for idx in range(len(vocab))}
+
 json.dump(filtered_vocab, codecs.open(output_prefix + ".vocab", "w", encoding="utf8"))
 
 np.save(output_prefix + ".npy", emb_matrix)
