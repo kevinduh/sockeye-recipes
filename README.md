@@ -79,6 +79,8 @@ The `egs` subdirectory contains recipes for various datasets.
 
 * [egs/optimizers](egs/optimizers): Example of training with different optimizers (e.g. ADAM, EVE, Nesterov ADAM, SGD, ...)
 
+* [egs/iarpa-material](egs/iarpa-material): Recipe for low-resource NMT using data from the IARPA MATERIAL program
+
 The [hpm](hpm) subdirectory contains hyperparameter (hpm) file templates. Besides NMT hyerparameters, the most important variables in this file to set are below: 
 
 * rootdir: location of your sockeye-recipes installation, used for finding relevant scripts (i.e. this is current directory, where this README file is located.)
